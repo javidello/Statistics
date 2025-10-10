@@ -5,59 +5,59 @@
   <title>My Statistics Blog</title>
   <style>
     /* ===== Base Styles ===== */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
     body {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #fef9f4; /* soft cream */
+      background-color: #fdf6f0; /* soft warm cream */
       color: #333;
       line-height: 1.6;
     }
 
     a {
-      color: #6c63ff; /* soft violet */
+      color: #5a4bcf; /* soft violet */
       text-decoration: none;
-      transition: color 0.3s;
+      transition: color 0.3s ease;
     }
 
     a:hover {
-      color: #ff6f61; /* soft coral on hover */
+      color: #ff8a65; /* soft coral on hover */
     }
 
     /* ===== Container ===== */
     .container {
-      max-width: 900px;
+      max-width: 850px;
       margin: 0 auto;
-      padding: 50px 20px;
+      padding: 60px 20px;
     }
 
     /* ===== Header ===== */
     header {
       text-align: center;
-      padding-bottom: 40px;
+      padding-bottom: 50px;
     }
 
     header h1 {
-      font-size: 2.8em;
+      font-size: 2.5em;
+      font-weight: 600;
       margin-bottom: 10px;
-      color: #6c63ff;
+      color: #5a4bcf;
     }
 
     header p {
-      font-size: 1.2em;
-      color: #555;
+      font-size: 1.15em;
+      color: #666;
     }
 
     /* ===== Homework List ===== */
-    .homework-list {
-      margin-top: 50px;
-    }
-
     .homework-list h2 {
       font-size: 1.8em;
+      font-weight: 600;
       margin-bottom: 20px;
-      color: #6c63ff;
-      border-bottom: 2px solid #ff6f61;
+      color: #5a4bcf;
+      border-bottom: 2px solid #ff8a65;
       display: inline-block;
       padding-bottom: 5px;
     }
@@ -65,19 +65,20 @@
     .homework-list ul {
       list-style-type: none;
       padding-left: 0;
+      margin-top: 20px;
     }
 
     .homework-list li {
-      background-color: #fff7f2; /* soft pastel background for list items */
-      margin-bottom: 15px;
-      padding: 15px 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      transition: transform 0.2s;
+      margin-bottom: 12px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      background-color: #fff9f5; /* soft white-pastel */
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .homework-list li:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(90, 75, 207, 0.1); /* soft violet shadow */
     }
 
     /* ===== Footer ===== */
@@ -85,9 +86,9 @@
       text-align: center;
       margin-top: 80px;
       padding-top: 30px;
-      border-top: 1px solid #eee;
-      color: #777;
+      color: #999;
       font-size: 0.9em;
+      border-top: 1px solid #eee;
     }
   </style>
 </head>
@@ -98,7 +99,7 @@
     <!-- Header -->
     <header>
       <h1>Welcome to My Statistics Blog</h1>
-      <p>A cozy place to explore my statistics research and homework projects.</p>
+      <p>You will find all the homeworks related to Statistics 2025/2026</p>
     </header>
 
     <!-- Homework List -->
@@ -106,13 +107,13 @@
       <h2>Homework & Projects</h2>
       <ul>
         <li><a href="homework1.html">Homework 1 — Create a Blog</a></li>
-        <!-- future homework links can go here -->
+       
       </ul>
     </section>
 
     <!-- Footer -->
     <footer>
-      Created by Your Name — La Sapienza University Statistics Course
+      &copy; 2025 Javid Farzaliyev — La Sapienza University
     </footer>
 
   </div>
