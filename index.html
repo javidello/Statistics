@@ -1,32 +1,121 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Statistics 2025/2026</title>
+  <meta charset="UTF-8">
+  <title>My Statistics Blog</title>
   <style>
-    body{font-family: Arial; max-width:900px;margin:40px auto;line-height:1.6;}
-    header{display:flex;justify-content:space-between;align-items:center;}
-    nav a{margin-left:12px;}
-    .hw-list li{margin:8px 0;}
+    /* ===== Base Styles ===== */
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fef9f4; /* soft cream */
+      color: #333;
+      line-height: 1.6;
+    }
+
+    a {
+      color: #6c63ff; /* soft violet */
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    a:hover {
+      color: #ff6f61; /* soft coral on hover */
+    }
+
+    /* ===== Container ===== */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 50px 20px;
+    }
+
+    /* ===== Header ===== */
+    header {
+      text-align: center;
+      padding-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2.8em;
+      margin-bottom: 10px;
+      color: #6c63ff;
+    }
+
+    header p {
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    /* ===== Homework List ===== */
+    .homework-list {
+      margin-top: 50px;
+    }
+
+    .homework-list h2 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #6c63ff;
+      border-bottom: 2px solid #ff6f61;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .homework-list ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .homework-list li {
+      background-color: #fff7f2; /* soft pastel background for list items */
+      margin-bottom: 15px;
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+
+    .homework-list li:hover {
+      transform: translateY(-3px);
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      text-align: center;
+      margin-top: 80px;
+      padding-top: 30px;
+      border-top: 1px solid #eee;
+      color: #777;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>My Statistics Blog</h1>
-    <nav><a href="index.html">Home</a></nav>
-  </header>
 
-  <p>Hi — this blog collects my course homeworks and research for the Statistics class.</p>
+  <div class="container">
 
-  <h2>Homework list</h2>
-  <ul class="hw-list">
-    <li><a href="homework1.html">Homework 1 — Create a blog</a></li>
-    <!-- add future homeworks here -->
-  </ul>
+    <!-- Header -->
+    <header>
+      <h1>Welcome to My Statistics Blog</h1>
+      <p>A cozy place to explore my statistics research and homework projects.</p>
+    </header>
 
-  <footer>
-    <p>Created by Javid Farzaliyev — Student at La Sapienza</p>
-  </footer>
+    <!-- Homework List -->
+    <section class="homework-list">
+      <h2>Homework & Projects</h2>
+      <ul>
+        <li><a href="homework1.html">Homework 1 — Create a Blog</a></li>
+        <!-- future homework links can go here -->
+      </ul>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      Created by Your Name — La Sapienza University Statistics Course
+    </footer>
+
+  </div>
+
 </body>
 </html>
