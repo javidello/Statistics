@@ -1,129 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Homework 2 - Dataset, Distributions & Caesar Cipher</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Homework 2 — Dataset, Distributions & Caesar Cipher</title>
 
-<!-- Inter Font -->
+<!-- Inter font -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-:root{
-  --bg:#f5f6fa;
-  --card-bg:#ffffff;
-  --text:#1e293b;
-  --muted:#475569;
-  --accent-a:#0ea5e9;
-  --accent-b:#f97316;
-  --radius:12px;
-  --shadow:0 8px 20px rgba(30,41,59,0.08);
-}
+  :root{
+    --bg:#f5f6fa;
+    --card:#ffffff;
+    --text:#172031;
+    --muted:#475569;
+    --accent1:#0ea5e9;
+    --accent2:#f97316;
+    --radius:12px;
+    --shadow:0 10px 30px rgba(17,24,39,0.06);
+  }
 
-body{
-  font-family:'Inter',sans-serif;
-  margin:0;
-  padding:0;
-  background: var(--bg);
-  color: var(--text);
-  line-height:1.6;
-}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.6;
+  }
 
-a { color: var(--accent-a); text-decoration: none; }
-a:hover { color: var(--accent-b); }
+  .wrap{max-width:980px;margin:28px auto;padding:28px;}
+  header,footer{text-align:center;margin-bottom:18px;}
 
-.wrap { max-width:900px; margin:0 auto; padding:40px 20px; }
+  h1{font-size:1.9rem;color:var(--accent1);margin:0 0 8px;}
+  h2{font-size:1.25rem;color:var(--accent2);margin:20px 0 10px;}
+  p,li{font-size:1rem;color:var(--muted);margin:8px 0;}
 
-header, footer { text-align:center; margin-bottom:24px; }
+  .card{background:var(--card);padding:18px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px;}
+  table{width:100%;border-collapse:collapse;margin:12px 0;}
+  table,th,td{border:1px solid #e6e9ee;}
+  th,td{padding:8px;text-align:center;font-size:0.95rem;}
+  th{background:var(--accent1);color:#fff;font-weight:600;}
 
-h1{ font-size:2rem; color: var(--accent-a); margin-bottom:16px; }
-h2{ font-size:1.4rem; color: var(--accent-b); margin-top:32px; margin-bottom:12px; }
-p{ font-size:1rem; margin-bottom:12px; color: var(--muted); }
+  pre{background:#f3f4f6;padding:10px;border-radius:8px;overflow:auto;font-size:0.95rem;}
 
-.card{
-  background: var(--card-bg);
-  padding:20px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  margin-bottom:24px;
-}
+  label{font-weight:600;color:var(--text);display:block;margin-top:8px;}
+  input[type="text"], input[type="number"], textarea, select{
+    width:100%;box-sizing:border-box;padding:8px;border-radius:8px;border:1px solid #d1d5db;font-size:1rem;
+  }
+  textarea{min-height:70px;resize:vertical;}
 
-table { width:100%; border-collapse: collapse; margin-top:12px; margin-bottom:12px; }
-table, th, td { border:1px solid #ddd; }
-th, td { padding:8px; text-align:center; }
-th { background: var(--accent-a); color:white; }
+  .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .controls > *{flex:1 1 180px;}
 
-input, textarea, button, select{
-  font-family:'Inter',sans-serif;
-  font-size:1rem;
-  padding:6px 10px;
-  margin:6px 0;
-  border-radius:8px;
-  border:1px solid #ccc;
-}
+  .small{font-size:0.9rem;color:var(--muted);}
 
-button{
-  background: var(--accent-b);
-  color:white;
-  cursor:pointer;
-  border:none;
-  transition:0.2s;
-}
+  button{
+    background:var(--accent2);color:#fff;padding:8px 12px;border-radius:8px;border:none;font-weight:600;cursor:pointer;
+  }
+  button.ghost{background:#fff;border:1px solid #e6e9ee;color:var(--accent1);}
 
-button:hover{ background: var(--accent-a); }
+  .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:12px;}
 
-.translator{ display:flex; flex-direction:column; gap:10px; margin-top:12px; }
-
-footer{
-  font-size:0.85rem;
-  color: var(--muted);
-  border-top:1px solid #ddd;
-  padding-top:20px;
-  margin-top:40px;
-}
-
-@media(max-width:600px){
-  h1{ font-size:1.6rem;}
-  h2{ font-size:1.2rem;}
-}
+  @media(max-width:620px){
+    .wrap{padding:16px;}
+    h1{font-size:1.5rem;}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-<!-- Header -->
-<header>
-<h1>Homework 2 — Dataset, Distributions & Caesar Cipher</h1>
-<a href="../index.html">← Back to Home</a>
-</header>
+    <header>
+      <h1>Homework 2 — Dataset, Distributions & Caesar Cipher</h1>
+      <a href="../index.html" class="small">← Back to Home</a>
+    </header>
 
-<!-- Part 1: Dataset & Distributions -->
-<div class="card">
-<h2>Part 1: Dataset & Distributions</h2>
-<p>A <strong>dataset</strong> is a structured collection of data organized in rows (records) and columns (variables). Each <strong>variable</strong> represents a measurable attribute. Variables can be:</p>
-<ul>
-<li><strong>Categorical:</strong> values in categories (e.g., Status: Success / Failed)</li>
-<li><strong>Numerical:</strong> measurable numbers (e.g., Login Attempts)</li>
-</ul>
+    <!-- PART 1 (updated, full definitions + examples) -->
+    <section class="card" id="part1">
+      <h2>Part 1 — Dataset and Distributions (complete)</h2>
 
-<p>In cybersecurity, datasets help analyze user behavior, detect anomalies, or track login attempts.</p>
+      <p><strong>What is a dataset?</strong> A dataset is a structured collection of observations. Each row (record) is one observation — for example, a single login attempt — and each column is a variable that describes an attribute of that observation (for example: user, IP address, status).</p>
 
-<h3>Sample Cybersecurity Dataset: Login Attempts</h3>
-<p>Table represents users attempting to login with their IP and status:</p>
-<table>
-<tr><th>User</th><th>IP Address</th><th>Status</th></tr>
-<tr><td>Alice</td><td>192.168.1.10</td><td>Success</td></tr>
-<tr><td>Bob</td><td>192.168.1.15</td><td>Failed</td></tr>
-<tr><td>Charlie</td><td>192.168.1.20</td><td>Success</td></tr>
-<tr><td>Alice</td><td>192.168.1.10</td><td>Failed</td></tr>
-<tr><td>Bob</td><td>192.168.1.15</td><td>Failed</td></tr>
-</table>
+      <p><strong>What is a variable?</strong> A variable is a property or characteristic recorded in the dataset:
+        <ul>
+          <li><strong>Categorical</strong> (qualitative): values from categories, e.g. <em>Status</em> ∈ {Success, Failed}.</li>
+          <li><strong>Numerical</strong> (quantitative): numerical values such as counts or response times.</li>
+        </ul>
+      </p>
 
-<h3>SQL Example</h3>
-<pre>
+      <h3>Univariate distribution — definition and example</h3>
+      <p><strong>Definition:</strong> A univariate distribution describes how values of a single variable are distributed. It answers: which values are most common? How spread out are the values? Are there outliers?</p>
+      <p><strong>Representations:</strong> for categories use frequency tables and bar charts; for numerical variables use histograms, boxplots, and summary statistics (mean, median, std).</p>
+      <p><strong>Example (login dataset):</strong> variable <em>Status</em>. Counts: Success = 2, Failed = 3. This simple univariate check shows failed attempts are more frequent and may deserve investigation.</p>
+
+      <h3>Bivariate distribution — definition and example</h3>
+      <p><strong>Definition:</strong> A bivariate distribution describes the joint behavior of two variables. For two categorical variables, it is typically shown as a contingency table (cross-tabulation). Bivariate analysis reveals relationships or dependencies not visible in univariate checks.</p>
+      <p><strong>Example:</strong> User × Status — if Bob has many failed attempts while others don't, we might investigate Bob's account or source IP.</p>
+
+      <h3>Sample dataset (login_attempts)</h3>
+      <p>Each row is an observation (one login attempt). Columns are the dataset variables.</p>
+      <table aria-label="Sample dataset">
+        <thead><tr><th>User</th><th>IP Address</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Alice</td><td>192.168.1.10</td><td>Success</td></tr>
+          <tr><td>Bob</td><td>192.168.1.15</td><td>Failed</td></tr>
+          <tr><td>Charlie</td><td>192.168.1.20</td><td>Success</td></tr>
+          <tr><td>Alice</td><td>192.168.1.10</td><td>Failed</td></tr>
+          <tr><td>Bob</td><td>192.168.1.15</td><td>Failed</td></tr>
+        </tbody>
+      </table>
+
+      <h4>SQL example</h4>
+      <pre>
 CREATE TABLE login_attempts (
   user TEXT,
   ip TEXT,
@@ -136,145 +130,360 @@ INSERT INTO login_attempts VALUES
 ('Charlie','192.168.1.20','Success'),
 ('Alice','192.168.1.10','Failed'),
 ('Bob','192.168.1.15','Failed');
-</pre>
+      </pre>
 
-<h3>Univariate Distribution</h3>
-<p>Count of each login status:</p>
-<table>
-<tr><th>Status</th><th>Count</th></tr>
-<tr><td>Success</td><td>2</td></tr>
-<tr><td>Failed</td><td>3</td></tr>
-</table>
-<canvas id="uniChart" width="400" height="200"></canvas>
+      <h4>How to compute univariate counts (SQL)</h4>
+      <pre>
+SELECT status, COUNT(*) AS cnt
+FROM login_attempts
+GROUP BY status;
+      </pre>
 
-<h3>Bivariate Distribution</h3>
-<p>User × Status relationship:</p>
-<table>
-<tr><th>User</th><th>Success</th><th>Failed</th></tr>
-<tr><td>Alice</td><td>1</td><td>1</td></tr>
-<tr><td>Bob</td><td>0</td><td>2</td></tr>
-<tr><td>Charlie</td><td>1</td><td>0</td></tr>
-</table>
-<canvas id="biChart" width="400" height="200"></canvas>
-</div>
+      <h4>How to compute bivariate counts (SQL)</h4>
+      <pre>
+SELECT user, status, COUNT(*) AS cnt
+FROM login_attempts
+GROUP BY user, status
+ORDER BY user, status;
+      </pre>
 
-<!-- Part 2: Caesar Cipher -->
-<div class="card">
-<h2>Part 2: Text Analysis & Caesar Cipher</h2>
-<p>This interactive tool allows text encryption/decryption, dynamic letter frequency analysis, and automatic decryption suggestions based on language statistics.</p>
+      <h3>Interpreting results — quick checklist</h3>
+      <ul>
+        <li><strong>Univariate:</strong> find dominant categories (modes), check spread and missing values.</li>
+        <li><strong>Bivariate:</strong> look for unusual pairs (e.g., one user with many fails).</li>
+        <li><strong>Next steps:</strong> filter suspicious IPs, inspect timestamps, and correlate with other logs.</li>
+      </ul>
 
-<div class="translator">
-<label>Select Sample Text or Enter Your Own:</label>
-<select id="sampleText" onchange="updateText()">
-<option value="HELLO WORLD">HELLO WORLD</option>
-<option value="CYBERSECURITY IS IMPORTANT">CYBERSECURITY IS IMPORTANT</option>
-<option value="DATA ANALYSIS AND STATISTICS">DATA ANALYSIS AND STATISTICS</option>
-<option value="">Custom</option>
-</select>
-<input id="inputText" type="text" value="HELLO WORLD" placeholder="Enter your text">
+      <p class="small"><em>Visualization tip:</em> use bar charts for categorical frequencies and stacked/grouped bars or heatmaps for bivariate counts.</p>
+    </section>
 
-<label>Shift (number):</label>
-<input id="shift" type="number" value="3" min="0" max="25">
-<button onclick="encryptText()">Encrypt Text</button>
+    <!-- Charts for Part 1 -->
+    <section class="card">
+      <h2>Part 1 — Visualizations</h2>
+      <p>Univariate and bivariate visualizations below are derived from the sample dataset above.</p>
 
-<label>Encrypted Text:</label>
-<textarea id="encrypted" readonly></textarea>
-<button onclick="decryptText()">Decrypt Text</button>
+      <div class="grid-2">
+        <div>
+          <h3 class="small">Univariate: Status counts</h3>
+          <canvas id="chartUnivariate" width="400" height="260" aria-label="Univariate status counts"></canvas>
+        </div>
 
-<label>Decrypted Text:</label>
-<textarea id="decrypted" readonly></textarea>
+        <div>
+          <h3 class="small">Bivariate: User × Status (stacked)</h3>
+          <canvas id="chartBivariate" width="400" height="260" aria-label="Bivariate user status"></canvas>
+        </div>
+      </div>
+    </section>
 
-<label>Letter Frequency Chart:</label>
-<canvas id="freqChart" width="600" height="250" style="border:1px solid #ddd; background:#fff;"></canvas>
-</div>
+    <!-- PART 2: Caesar + features -->
+    <section class="card" id="part2">
+      <h2>Part 2 — Text Analysis & Caesar Cipher (interactive)</h2>
+      <p>Use the controls below to encrypt, try automatic decryption, inspect letter frequencies, and experiment with different texts and shifts.</p>
 
-</div>
+      <label for="sampleText">Choose sample text</label>
+      <div class="controls">
+        <select id="sampleText" onchange="onSampleChange()">
+          <option value="HELLO WORLD">HELLO WORLD</option>
+          <option value="CYBERSECURITY IS IMPORTANT">CYBERSECURITY IS IMPORTANT</option>
+          <option value="DATA ANALYSIS AND STATISTICS">DATA ANALYSIS AND STATISTICS</option>
+          <option value="the quick brown fox jumps over the lazy dog">the quick brown fox jumps over the lazy dog</option>
+          <option value="">(custom)</option>
+        </select>
 
-<footer>
-&copy; Javid Farzaliyev — La Sapienza University
-</footer>
+        <button class="ghost" onclick="randomSample()">Random sample</button>
+      </div>
+
+      <label for="inputText">Input text (plaintext)</label>
+      <input id="inputText" type="text" value="HELLO WORLD" placeholder="Type or choose a sample">
+
+      <div style="display:flex;gap:10px;align-items:center;margin-top:8px;">
+        <div style="flex:1">
+          <label for="shift">Shift (0–25)</label>
+          <input id="shift" type="range" min="0" max="25" value="3" oninput="onShiftChange();" />
+        </div>
+        <div style="width:110px;">
+          <label for="shiftNum">Shift value</label>
+          <input id="shiftNum" type="number" min="0" max="25" value="3" oninput="onShiftNumericChange();" />
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+        <button onclick="doEncrypt()">Encrypt</button>
+        <button onclick="doAutoDecrypt()">Auto-decrypt (frequency)</button>
+        <button onclick="doClear()">Clear</button>
+      </div>
+
+      <label>Encrypted text</label>
+      <textarea id="encryptedText" readonly></textarea>
+
+      <label>Auto-decryption suggestion (best shift)</label>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <input id="bestShift" type="text" readonly style="width:100px;">
+        <button onclick="applyBestShift()">Apply suggested shift</button>
+      </div>
+
+      <label>Decrypted text</label>
+      <textarea id="decryptedText" readonly></textarea>
+
+      <h3 style="margin-top:16px;">Letter frequency (ciphertext)</h3>
+      <canvas id="chartFreq" width="700" height="260" aria-label="Letter frequency chart"></canvas>
+
+    </section>
+
+    <footer>
+      &copy; 2025 Your Name — La Sapienza University
+    </footer>
+  </div>
 
 <script>
-// ========== Sample Text Selector ==========
-function updateText(){
-    const sel = document.getElementById('sampleText');
-    const input = document.getElementById('inputText');
-    input.value = sel.value;
-    drawFreqChart(input.value);
+/* -------------------------
+   Data for Part 1 (sample)
+   ------------------------- */
+const sampleDataset = [
+  {user:'Alice', ip:'192.168.1.10', status:'Success'},
+  {user:'Bob', ip:'192.168.1.15', status:'Failed'},
+  {user:'Charlie', ip:'192.168.1.20', status:'Success'},
+  {user:'Alice', ip:'192.168.1.10', status:'Failed'},
+  {user:'Bob', ip:'192.168.1.15', status:'Failed'}
+];
+
+// compute counts for charts
+function computeUnivariateCounts(){
+  const counts = {Success:0, Failed:0};
+  sampleDataset.forEach(r => { counts[r.status] = (counts[r.status]||0) + 1; });
+  return counts;
 }
 
-// ========== Caesar Cipher Functions ==========
+function computeBivariate(){
+  // users list
+  const users = [...new Set(sampleDataset.map(r=>r.user))];
+  const success = users.map(u => sampleDataset.filter(r=>r.user===u && r.status==='Success').length);
+  const failed  = users.map(u => sampleDataset.filter(r=>r.user===u && r.status==='Failed').length);
+  return {users, success, failed};
+}
+
+/* -------------------------
+   Chart: Univariate
+   ------------------------- */
+const uniCtx = document.getElementById('chartUnivariate').getContext('2d');
+const uniCounts = computeUnivariateCounts();
+const uniChart = new Chart(uniCtx, {
+  type:'bar',
+  data:{
+    labels: ['Success','Failed'],
+    datasets:[{
+      label:'Count',
+      data: [uniCounts.Success, uniCounts.Failed],
+      backgroundColor: [getComputedStyle(document.documentElement).getPropertyValue('--accent1') || '#0ea5e9',
+                        getComputedStyle(document.documentElement).getPropertyValue('--accent2') || '#f97316']
+    }]
+  },
+  options:{ responsive:true, plugins:{legend:{display:false}} }
+});
+
+/* -------------------------
+   Chart: Bivariate (stacked)
+   ------------------------- */
+const biCtx = document.getElementById('chartBivariate').getContext('2d');
+const bi = computeBivariate();
+const biChart = new Chart(biCtx, {
+  type:'bar',
+  data:{
+    labels: bi.users,
+    datasets:[
+      { label:'Success', data: bi.success, backgroundColor: '#0ea5e9' },
+      { label:'Failed',  data: bi.failed,  backgroundColor: '#f97316' }
+    ]
+  },
+  options:{
+    responsive:true,
+    scales:{
+      x:{ stacked:true },
+      y:{ stacked:true, beginAtZero:true }
+    }
+  }
+});
+
+/* -------------------------
+   Caesar cipher helpers
+   ------------------------- */
 function caesarEncrypt(str, shift){
-    return str.toUpperCase().split('').map(c=>{
-        if(c >= 'A' && c <= 'Z'){
-            return String.fromCharCode((c.charCodeAt(0)-65+shift)%26 + 65);
-        } else {
-            return c;
-        }
-    }).join('');
+  return str.toUpperCase().split('').map(c=>{
+    if(c >= 'A' && c <= 'Z'){
+      const code = (c.charCodeAt(0) - 65 + shift) % 26;
+      return String.fromCharCode(65 + (code<0?code+26:code));
+    } else return c;
+  }).join('');
 }
 
 function caesarDecrypt(str, shift){
-    return caesarEncrypt(str,(26-shift)%26);
+  // decrypt by shifting back
+  return caesarEncrypt(str, (26 - (shift % 26)) % 26);
 }
 
-// ========== Encrypt / Decrypt Actions ==========
-function encryptText(){
-    const text = document.getElementById('inputText').value;
-    const shift = parseInt(document.getElementById('shift').value);
-    const encrypted = caesarEncrypt(text, shift);
-    document.getElementById('encrypted').value = encrypted;
-    document.getElementById('decrypted').value = '';
-    drawFreqChart(encrypted);
+/* -------------------------
+   UI wiring
+   ------------------------- */
+function onSampleChange(){
+  const sel = document.getElementById('sampleText');
+  const txt = document.getElementById('inputText');
+  txt.value = sel.value;
+  renderFrequencyChart(txt.value);
 }
 
-function decryptText(){
-    const text = document.getElementById('encrypted').value;
-    const shift = parseInt(document.getElementById('shift').value);
-    const decrypted = caesarDecrypt(text, shift);
-    document.getElementById('decrypted').value = decrypted;
-    drawFreqChart(text); // still show chart of encrypted text
+function randomSample(){
+  const samples = [
+    "PASSWORD ATTEMPT FROM 10.0.0.1",
+    "UNUSUAL ACTIVITY DETECTED IN ACCOUNT",
+    "BRUTE FORCE ATTEMPT DETECTED",
+    "LOGIN SUCCESS FROM KNOWN DEVICE",
+    "the quick brown fox jumps over the lazy dog"
+  ];
+  const t = samples[Math.floor(Math.random()*samples.length)];
+  document.getElementById('inputText').value = t;
+  renderFrequencyChart(t);
 }
 
-// ========== Letter Frequency Chart ==========
-let freqChart; // global chart variable
-
-function drawFreqChart(text){
-    const ctx = document.getElementById('freqChart').getContext('2d');
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-    const counts = {};
-    letters.forEach(l => counts[l]=0);
-    text.toUpperCase().replace(/[^A-Z]/g,'').split('').forEach(c=>{
-        if(counts[c]!==undefined) counts[c]++;
-    });
-
-    const data = letters.map(l=>counts[l]);
-
-    if(freqChart){ freqChart.destroy(); } // destroy previous chart
-
-    freqChart = new Chart(ctx,{
-        type:'bar',
-        data:{
-            labels: letters,
-            datasets:[{
-                label: 'Letter Frequency',
-                data: data,
-                backgroundColor: '#0ea5e9'
-            }]
-        },
-        options:{
-            responsive:true,
-            plugins:{
-                legend:{display:false}
-            },
-            scales:{
-                y:{ beginAtZero:true, ticks:{ precision:0 } }
-            }
-        }
-    });
+function onShiftChange(){
+  const s = document.getElementById('shift').value;
+  document.getElementById('shiftNum').value = s;
+}
+function onShiftNumericChange(){
+  let n = parseInt(document.getElementById('shiftNum').value) || 0;
+  if(n < 0) n = 0;
+  if(n > 25) n = 25;
+  document.getElementById('shift').value = n;
 }
 
-// Initialize chart with default text
-drawFreqChart(document.getElementById('inputText').value);
+/* encrypt / decrypt buttons */
+function doEncrypt(){
+  const t = document.getElementById('inputText').value;
+  const s = parseInt(document.getElementById('shift').value) || 0;
+  const enc = caesarEncrypt(t, s);
+  document.getElementById('encryptedText').value = enc;
+  document.getElementById('decryptedText').value = '';
+  renderFrequencyChart(enc);
+}
+
+function doClear(){
+  document.getElementById('inputText').value = '';
+  document.getElementById('encryptedText').value = '';
+  document.getElementById('decryptedText').value = '';
+  document.getElementById('bestShift').value = '';
+  renderFrequencyChart('');
+}
+
+/* -------------------------
+   Frequency chart (Chart.js)
+   ------------------------- */
+let freqChart = null;
+function letterCountsFromText(text){
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const counts = {};
+  for(const ch of letters) counts[ch]=0;
+  text.toUpperCase().replace(/[^A-Z]/g,'').split('').forEach(c=>{
+    if(counts[c] !== undefined) counts[c] += 1;
+  });
+  return counts;
+}
+
+function renderFrequencyChart(text){
+  const counts = letterCountsFromText(text);
+  const labels = Object.keys(counts);
+  const data = Object.values(counts);
+  const ctx = document.getElementById('chartFreq').getContext('2d');
+  if(freqChart) freqChart.destroy();
+  freqChart = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels: labels,
+      datasets:[{
+        label:'Frequency',
+        data: data,
+        backgroundColor: labels.map(l => (l==='E' ? '#f97316' : '#0ea5e9'))
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false}},
+      scales:{ y:{ beginAtZero:true, ticks:{ precision:0 } } }
+    }
+  });
+}
+
+/* -------------------------
+   Auto-decrypt using frequency (chi-squared)
+   ------------------------- */
+// Reference English letter frequencies (percent)
+const ENG_FREQ = {
+  A:8.167,B:1.492,C:2.782,D:4.253,E:12.702,F:2.228,G:2.015,H:6.094,I:6.966,J:0.153,K:0.772,
+  L:4.025,M:2.406,N:6.749,O:7.507,P:1.929,Q:0.095,R:5.987,S:6.327,T:9.056,U:2.758,V:0.978,W:2.360,X:0.150,Y:1.974,Z:0.074
+};
+
+function chiSquaredScore(cipherCounts, total){
+  // compute chi-squared between observed counts and expected counts given english frequencies
+  let score = 0;
+  for(const L in ENG_FREQ){
+    const expected = (ENG_FREQ[L]/100) * total;
+    const observed = cipherCounts[L] || 0;
+    const diff = observed - expected;
+    score += (diff*diff) / (expected || 1);
+  }
+  return score;
+}
+
+function doAutoDecrypt(){
+  const ciphertext = document.getElementById('inputText').value; // try on plaintext? user likely wants to auto-decrypt an encrypted text; allow both flows
+  // If encrypted textarea has content, prefer that
+  const encArea = document.getElementById('encryptedText').value.trim();
+  const textToAnalyze = encArea.length ? encArea : ciphertext;
+  if(!textToAnalyze){ alert('Please enter or encrypt some text first.'); return; }
+
+  const lettersOnly = textToAnalyze.toUpperCase().replace(/[^A-Z]/g,'');
+  const total = lettersOnly.length;
+  if(total === 0){ alert('No letters to analyze.'); return; }
+
+  // try all shifts, compute chi-sq for each shifted text
+  let best = {shift:0,score:Infinity,plaintext:''};
+  for(let shift=0; shift<26; shift++){
+    const attempt = caesarDecrypt(textToAnalyze, shift);
+    const counts = letterCountsFromText(attempt);
+    const score = chiSquaredScore(counts, total);
+    if(score < best.score){
+      best = {shift,score,plaintext:attempt};
+    }
+  }
+
+  // present best suggestion
+  document.getElementById('bestShift').value = best.shift;
+  document.getElementById('decryptedText').value = best.plaintext;
+  // also update decrypted text if user wants to apply
+  renderFrequencyChart(textToAnalyze);
+  // highlight that this is a suggestion
+  alert('Auto-decrypt suggestion: shift = ' + best.shift + '. Check "Decrypted text" box.');
+}
+
+function applyBestShift(){
+  const s = parseInt(document.getElementById('bestShift').value);
+  if(isNaN(s)){ alert('No suggested shift available. Run auto-decrypt first.'); return; }
+  const enc = document.getElementById('encryptedText').value || document.getElementById('inputText').value;
+  const dec = caesarDecrypt(enc, s);
+  document.getElementById('decryptedText').value = dec;
+}
+
+/* initialize charts */
+renderFrequencyChart(document.getElementById('inputText').value);
+
+/* ensure shift numeric sync */
+document.getElementById('shift').addEventListener('input', ()=> {
+  document.getElementById('shiftNum').value = document.getElementById('shift').value;
+});
+document.getElementById('shiftNum').addEventListener('input', ()=> {
+  let v = parseInt(document.getElementById('shiftNum').value) || 0;
+  if(v < 0) v = 0;
+  if(v > 25) v = 25;
+  document.getElementById('shift').value = v;
+});
 </script>
-
+</body>
+</html>
