@@ -1,4 +1,4 @@
-# My Statistics Blog
+# Statistics 
 
 Welcome to my Statistics Blog.
 
