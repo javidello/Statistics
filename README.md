@@ -13,7 +13,9 @@ Statistics is the science of collecting, analyzing, and interpreting data. In th
 - **Home Page:** `index.html` — welcome page with links to all homework and projects.
 - **Homework Pages:**
   - `homework1/homework1.html` — What is Statistics and Why Can It Be Useful for Cybersecurity?
-  - `homework2/` — folder prepared for next homework (content will be added later).
+  - `homework2/homework2.html` — Dataset, Distribution & Caesar Cipher
+
+
 
 ## Access
 
