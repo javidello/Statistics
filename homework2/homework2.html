@@ -3,24 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Homework 2 - Dataset & Caesar Cipher</title>
+<title>Homework 2 - Dataset, Distributions & Caesar Cipher</title>
 
+<!-- Inter Font -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root{
-  --bg: #f5f6fa;
-  --card-bg: #ffffff;
-  --text: #1e293b;
-  --muted: #475569;
-  --accent-a: #0ea5e9;
-  --accent-b: #f97316;
-  --radius: 12px;
-  --shadow: 0 8px 20px rgba(30,41,59,0.08);
+  --bg:#f5f6fa;
+  --card-bg:#ffffff;
+  --text:#1e293b;
+  --muted:#475569;
+  --accent-a:#0ea5e9;
+  --accent-b:#f97316;
+  --radius:12px;
+  --shadow:0 8px 20px rgba(30,41,59,0.08);
 }
 
 body{
-  font-family:'Inter', sans-serif;
+  font-family:'Inter',sans-serif;
   margin:0;
   padding:0;
   background: var(--bg);
@@ -31,11 +35,7 @@ body{
 a { color: var(--accent-a); text-decoration: none; }
 a:hover { color: var(--accent-b); }
 
-.wrap {
-  max-width:900px;
-  margin:0 auto;
-  padding:40px 20px;
-}
+.wrap { max-width:900px; margin:0 auto; padding:40px 20px; }
 
 header, footer { text-align:center; margin-bottom:24px; }
 
@@ -43,7 +43,7 @@ h1{ font-size:2rem; color: var(--accent-a); margin-bottom:16px; }
 h2{ font-size:1.4rem; color: var(--accent-b); margin-top:32px; margin-bottom:12px; }
 p{ font-size:1rem; margin-bottom:12px; color: var(--muted); }
 
-.card {
+.card{
   background: var(--card-bg);
   padding:20px;
   border-radius: var(--radius);
@@ -51,24 +51,20 @@ p{ font-size:1rem; margin-bottom:12px; color: var(--muted); }
   margin-bottom:24px;
 }
 
-table {
-  width:100%;
-  border-collapse: collapse;
-  margin-top:12px;
-  margin-bottom:12px;
-}
+table { width:100%; border-collapse: collapse; margin-top:12px; margin-bottom:12px; }
 table, th, td { border:1px solid #ddd; }
 th, td { padding:8px; text-align:center; }
 th { background: var(--accent-a); color:white; }
 
-input, textarea, button {
-  font-family:'Inter', sans-serif;
+input, textarea, button, select{
+  font-family:'Inter',sans-serif;
   font-size:1rem;
   padding:6px 10px;
   margin:6px 0;
   border-radius:8px;
   border:1px solid #ccc;
 }
+
 button{
   background: var(--accent-b);
   color:white;
@@ -76,6 +72,7 @@ button{
   border:none;
   transition:0.2s;
 }
+
 button:hover{ background: var(--accent-a); }
 
 .translator{ display:flex; flex-direction:column; gap:10px; margin-top:12px; }
@@ -99,22 +96,23 @@ footer{
 
 <!-- Header -->
 <header>
-<h1>Homework 2 — Dataset & Caesar Cipher</h1>
+<h1>Homework 2 — Dataset, Distributions & Caesar Cipher</h1>
 <a href="../index.html">← Back to Home</a>
 </header>
 
 <!-- Part 1: Dataset & Distributions -->
 <div class="card">
-<h2>Part 1: Understanding Dataset & Distributions</h2>
+<h2>Part 1: Dataset & Distributions</h2>
+<p>A <strong>dataset</strong> is a structured collection of data organized in rows (records) and columns (variables). Each <strong>variable</strong> represents a measurable attribute. Variables can be:</p>
+<ul>
+<li><strong>Categorical:</strong> values in categories (e.g., Status: Success / Failed)</li>
+<li><strong>Numerical:</strong> measurable numbers (e.g., Login Attempts)</li>
+</ul>
 
-<p>In cybersecurity, analyzing datasets can help identify patterns such as login attempts, suspicious IPs, and user behavior. A <strong>dataset</strong> is a structured collection of data, typically organized in rows (records) and columns (variables).</p>
+<p>In cybersecurity, datasets help analyze user behavior, detect anomalies, or track login attempts.</p>
 
-<p>A <strong>variable</strong> is a characteristic or attribute measured in the dataset. Univariate analysis looks at one variable at a time, while bivariate analysis explores the relationship between two variables.</p>
-
-<h3>Sample Dataset: Login Attempts</h3>
-
-<p>This dataset represents login attempts from different users:</p>
-
+<h3>Sample Cybersecurity Dataset: Login Attempts</h3>
+<p>Table represents users attempting to login with their IP and status:</p>
 <table>
 <tr><th>User</th><th>IP Address</th><th>Status</th></tr>
 <tr><td>Alice</td><td>192.168.1.10</td><td>Success</td></tr>
@@ -124,62 +122,96 @@ footer{
 <tr><td>Bob</td><td>192.168.1.15</td><td>Failed</td></tr>
 </table>
 
-<h3>Univariate Distribution</h3>
-<p>Example: Count of each login status:</p>
+<h3>SQL Example</h3>
+<pre>
+CREATE TABLE login_attempts (
+  user TEXT,
+  ip TEXT,
+  status TEXT
+);
 
+INSERT INTO login_attempts VALUES
+('Alice','192.168.1.10','Success'),
+('Bob','192.168.1.15','Failed'),
+('Charlie','192.168.1.20','Success'),
+('Alice','192.168.1.10','Failed'),
+('Bob','192.168.1.15','Failed');
+</pre>
+
+<h3>Univariate Distribution</h3>
+<p>Count of each login status:</p>
 <table>
 <tr><th>Status</th><th>Count</th></tr>
 <tr><td>Success</td><td>2</td></tr>
 <tr><td>Failed</td><td>3</td></tr>
 </table>
+<canvas id="uniChart" width="400" height="200"></canvas>
 
 <h3>Bivariate Distribution</h3>
-<p>Example: User × Status combination:</p>
-
+<p>User × Status relationship:</p>
 <table>
 <tr><th>User</th><th>Success</th><th>Failed</th></tr>
 <tr><td>Alice</td><td>1</td><td>1</td></tr>
 <tr><td>Bob</td><td>0</td><td>2</td></tr>
 <tr><td>Charlie</td><td>1</td><td>0</td></tr>
 </table>
-
+<canvas id="biChart" width="400" height="200"></canvas>
 </div>
 
 <!-- Part 2: Caesar Cipher -->
 <div class="card">
 <h2>Part 2: Text Analysis & Caesar Cipher</h2>
+<p>This interactive tool allows text encryption/decryption, dynamic letter frequency analysis, and automatic decryption suggestions based on language statistics.</p>
 
-<p>We can also explore **text analysis**. For example, computing the distribution of letters in a message and encrypting it using a Caesar cipher.</p>
-
-<h3>Interactive Caesar Cipher App</h3>
 <div class="translator">
-<label>Enter your text:</label>
-<input id="inputText" type="text" value="HELLO WORLD">
+<label>Select Sample Text or Enter Your Own:</label>
+<select id="sampleText" onchange="updateText()">
+<option value="HELLO WORLD">HELLO WORLD</option>
+<option value="CYBERSECURITY IS IMPORTANT">CYBERSECURITY IS IMPORTANT</option>
+<option value="DATA ANALYSIS AND STATISTICS">DATA ANALYSIS AND STATISTICS</option>
+<option value="">Custom</option>
+</select>
+<input id="inputText" type="text" value="HELLO WORLD" placeholder="Enter your text">
+
 <label>Shift (number):</label>
-<input id="shift" type="number" value="3">
+<input id="shift" type="number" value="3" min="0" max="25">
 <button onclick="encryptText()">Encrypt Text</button>
+
 <label>Encrypted Text:</label>
 <textarea id="encrypted" readonly></textarea>
 <button onclick="decryptText()">Decrypt Text</button>
+
 <label>Decrypted Text:</label>
 <textarea id="decrypted" readonly></textarea>
 
-<h3>Letter Frequency Distribution</h3>
-<p>This will update automatically when you encrypt text.</p>
-<canvas id="freqChart" width="400" height="200" style="border:1px solid #ddd; background:#fff;"></canvas>
+<label>Letter Frequency Chart:</label>
+<canvas id="freqChart" width="600" height="250" style="border:1px solid #ddd; background:#fff;"></canvas>
 </div>
 
+</div>
+
+<footer>
+&copy; Javid Farzaliyev — La Sapienza University
+</footer>
+
 <script>
+// Update input for sample text
+function updateText(){
+  const sel=document.getElementById('sampleText');
+  const input=document.getElementById('inputText');
+  input.value=sel.value;
+  drawFreqChart(input.value);
+}
+
 // Caesar Cipher Functions
-function caesarEncrypt(str, shift) {
+function caesarEncrypt(str, shift){
   return str.toUpperCase().split('').map(c=>{
-    if(c>='A' && c<='Z'){
-      return String.fromCharCode((c.charCodeAt(0)-65+shift)%26+65);
-    } else { return c; }
+    if(c>='A' && c<='Z') return String.fromCharCode((c.charCodeAt(0)-65+shift)%26+65);
+    else return c;
   }).join('');
 }
 
-function caesarDecrypt(str, shift) {
+function caesarDecrypt(str, shift){
   return caesarEncrypt(str,(26-shift)%26);
 }
 
@@ -198,35 +230,19 @@ function decryptText(){
   document.getElementById('decrypted').value=caesarDecrypt(text,shift);
 }
 
-// Letter Frequency Chart
-function drawFreqChart(text){
-  const canvas=document.getElementById('freqChart');
-  const ctx=canvas.getContext('2d');
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  const counts={};
-  text.toUpperCase().replace(/[^A-Z]/g,'').split('').forEach(c=>{
-    counts[c]=counts[c]?counts[c]+1:1;
-  });
-  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  const max=Math.max(...letters.map(l=>counts[l]||0));
-  letters.forEach((l,i)=>{
-    const h=(counts[l]||0)/max*canvas.height*0.8;
-    ctx.fillStyle='#0ea5e9';
-    ctx.fillRect(i*15+5,canvas.height-h,10,h);
-    ctx.fillStyle='#000';
-    ctx.fillText(l,i*15+5,canvas.height-5);
-  });
-}
+// Charts.js for Dataset
+const uniCtx=document.getElementById('uniChart').getContext('2d');
+const uniChart=new Chart(uniCtx,{
+  type:'bar',
+  data:{
+    labels:['Success','Failed'],
+    datasets:[{
+      label:'Login Status Count',
+      data:[2,3],
+      backgroundColor:['#0ea5e9','#f97316']
+    }]
+  },
+  options:{ responsive:true, plugins:{legend:{display:false}} }
+});
 
-drawFreqChart(document.getElementById('inputText').value);
-</script>
-
-</div>
-
-<footer>
-&copy; 2025 Javid Farzaliyev — La Sapienza University
-</footer>
-
-</div>
-</body>
-</html>
+const biCtx=document.getElementById('biChart').getContext
