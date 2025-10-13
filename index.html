@@ -1,117 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Statistics Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ===== Base Styles ===== */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fdf6f0; /* soft warm cream */
-      color: #333;
-      line-height: 1.6;
+    :root{
+      --bg: #fbfcfd;
+      --card-bg: #ffffff;
+      --text: #0f1724;
+      --muted: #667085;
+      --accent-a: #0ea5a0;
+      --accent-b: #ff7a59;
+      --accent-c: #374151;
+      --radius: 12px;
+      --shadow: 0 6px 22px rgba(17,24,39,0.06);
     }
 
-    a {
-      color: #5a4bcf; /* soft violet */
-      text-decoration: none;
-      transition: color 0.3s ease;
+    body{
+      margin:0; font-family: "Inter", sans-serif; background: var(--bg); color: var(--text); line-height:1.6;
     }
+    a{ color: var(--accent-c); text-decoration:none; transition: color 0.3s; }
+    a:hover{ color: var(--accent-b); }
 
-    a:hover {
-      color: #ff8a65; /* soft coral on hover */
-    }
+    .container{ max-width:900px; margin:40px auto; padding:20px; }
 
-    /* ===== Container ===== */
-    .container {
-      max-width: 850px;
-      margin: 0 auto;
-      padding: 60px 20px;
-    }
+    header{text-align:center; margin-bottom:40px;}
+    header h1{font-size:2.4rem; color: var(--accent-a); margin-bottom:10px;}
+    header p{color:var(--muted); font-size:1.1rem;}
 
-    /* ===== Header ===== */
-    header {
-      text-align: center;
-      padding-bottom: 50px;
-    }
+    .homework-list h2{font-size:1.8rem; color: var(--accent-c); border-bottom:2px solid var(--accent-b); display:inline-block; padding-bottom:5px; margin-bottom:20px;}
+    .homework-list ul{list-style:none; padding:0;}
+    .homework-list li{background:#fef9f4; margin-bottom:15px; padding:15px 20px; border-radius:var(--radius); box-shadow:var(--shadow);}
+    .homework-list li:hover{transform:translateY(-2px); transition:0.2s;}
 
-    header h1 {
-      font-size: 2.5em;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: #5a4bcf;
-    }
-
-    header p {
-      font-size: 1.15em;
-      color: #666;
-    }
-
-    /* ===== Homework List ===== */
-    .homework-list h2 {
-      font-size: 1.8em;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: #5a4bcf;
-      border-bottom: 2px solid #ff8a65;
-      display: inline-block;
-      padding-bottom: 5px;
-    }
-
-    .homework-list ul {
-      list-style-type: none;
-      padding-left: 0;
-      margin-top: 20px;
-    }
-
-    .homework-list li {
-      margin-bottom: 12px;
-      padding: 12px 18px;
-      border-radius: 10px;
-      background-color: #fff9f5; /* soft white-pastel */
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .homework-list li:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(90, 75, 207, 0.1); /* soft violet shadow */
-    }
-
-    /* ===== Footer ===== */
-    footer {
-      text-align: center;
-      margin-top: 80px;
-      padding-top: 30px;
-      color: #999;
-      font-size: 0.9em;
-      border-top: 1px solid #eee;
-    }
+    footer{text-align:center; margin-top:60px; padding-top:30px; border-top:1px solid #eee; color:var(--muted); font-size:0.9em;}
   </style>
 </head>
 <body>
 
   <div class="container">
 
-    <!-- Header -->
     <header>
-      <h1>Welcome to My Statistics Blog</h1>
-      <p>Hi my name is Javid Farzaliyev. I will share my Statistics homeworks in this blog!</p>
+      <h1>My Statistics Blog</h1>
+      <p>Hi! My name is Javid Farzaliyev and here you will find all my projects related to Statistics</p>
     </header>
 
-    <!-- Homework List -->
     <section class="homework-list">
       <h2>Homework & Projects</h2>
       <ul>
-        <li><a href="homework1.html">Homework 1 — Create a Blog</a></li>
-       
+        <li><a href="homework1/homework1.html">Homework 1 — What is Statistics and Why Can It Be Useful for Cybersecurity?</a></li>
+        <li><a href="homework2/">Homework 2 — (coming soon)</a></li>
       </ul>
     </section>
 
-    <!-- Footer -->
     <footer>
       &copy; 2025 Javid Farzaliyev — La Sapienza University
     </footer>
