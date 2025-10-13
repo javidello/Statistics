@@ -18,7 +18,7 @@ Statistics is the science of collecting, analyzing, and interpreting data. In th
 ## Access
 
 The live blog can be viewed here:  
-[https://javidello.github.io/statisticsblog/](https://javidello.github.io/statisticsblog/)
+[https://javidello.github.io/Statistics/](https://javidello.github.io/Statistics/)
 
 
 ## Notes
