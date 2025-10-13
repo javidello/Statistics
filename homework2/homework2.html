@@ -195,54 +195,86 @@ INSERT INTO login_attempts VALUES
 </footer>
 
 <script>
-// Update input for sample text
+// ========== Sample Text Selector ==========
 function updateText(){
-  const sel=document.getElementById('sampleText');
-  const input=document.getElementById('inputText');
-  input.value=sel.value;
-  drawFreqChart(input.value);
+    const sel = document.getElementById('sampleText');
+    const input = document.getElementById('inputText');
+    input.value = sel.value;
+    drawFreqChart(input.value);
 }
 
-// Caesar Cipher Functions
+// ========== Caesar Cipher Functions ==========
 function caesarEncrypt(str, shift){
-  return str.toUpperCase().split('').map(c=>{
-    if(c>='A' && c<='Z') return String.fromCharCode((c.charCodeAt(0)-65+shift)%26+65);
-    else return c;
-  }).join('');
+    return str.toUpperCase().split('').map(c=>{
+        if(c >= 'A' && c <= 'Z'){
+            return String.fromCharCode((c.charCodeAt(0)-65+shift)%26 + 65);
+        } else {
+            return c;
+        }
+    }).join('');
 }
 
 function caesarDecrypt(str, shift){
-  return caesarEncrypt(str,(26-shift)%26);
+    return caesarEncrypt(str,(26-shift)%26);
 }
 
+// ========== Encrypt / Decrypt Actions ==========
 function encryptText(){
-  const text=document.getElementById('inputText').value;
-  const shift=parseInt(document.getElementById('shift').value);
-  const encrypted=caesarEncrypt(text,shift);
-  document.getElementById('encrypted').value=encrypted;
-  document.getElementById('decrypted').value='';
-  drawFreqChart(encrypted);
+    const text = document.getElementById('inputText').value;
+    const shift = parseInt(document.getElementById('shift').value);
+    const encrypted = caesarEncrypt(text, shift);
+    document.getElementById('encrypted').value = encrypted;
+    document.getElementById('decrypted').value = '';
+    drawFreqChart(encrypted);
 }
 
 function decryptText(){
-  const text=document.getElementById('encrypted').value;
-  const shift=parseInt(document.getElementById('shift').value);
-  document.getElementById('decrypted').value=caesarDecrypt(text,shift);
+    const text = document.getElementById('encrypted').value;
+    const shift = parseInt(document.getElementById('shift').value);
+    const decrypted = caesarDecrypt(text, shift);
+    document.getElementById('decrypted').value = decrypted;
+    drawFreqChart(text); // still show chart of encrypted text
 }
 
-// Charts.js for Dataset
-const uniCtx=document.getElementById('uniChart').getContext('2d');
-const uniChart=new Chart(uniCtx,{
-  type:'bar',
-  data:{
-    labels:['Success','Failed'],
-    datasets:[{
-      label:'Login Status Count',
-      data:[2,3],
-      backgroundColor:['#0ea5e9','#f97316']
-    }]
-  },
-  options:{ responsive:true, plugins:{legend:{display:false}} }
-});
+// ========== Letter Frequency Chart ==========
+let freqChart; // global chart variable
 
-const biCtx=document.getElementById('biChart').getContext
+function drawFreqChart(text){
+    const ctx = document.getElementById('freqChart').getContext('2d');
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const counts = {};
+    letters.forEach(l => counts[l]=0);
+    text.toUpperCase().replace(/[^A-Z]/g,'').split('').forEach(c=>{
+        if(counts[c]!==undefined) counts[c]++;
+    });
+
+    const data = letters.map(l=>counts[l]);
+
+    if(freqChart){ freqChart.destroy(); } // destroy previous chart
+
+    freqChart = new Chart(ctx,{
+        type:'bar',
+        data:{
+            labels: letters,
+            datasets:[{
+                label: 'Letter Frequency',
+                data: data,
+                backgroundColor: '#0ea5e9'
+            }]
+        },
+        options:{
+            responsive:true,
+            plugins:{
+                legend:{display:false}
+            },
+            scales:{
+                y:{ beginAtZero:true, ticks:{ precision:0 } }
+            }
+        }
+    });
+}
+
+// Initialize chart with default text
+drawFreqChart(document.getElementById('inputText').value);
+</script>
+
