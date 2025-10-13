@@ -1,230 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homework 2 - Dataset & Caesar Cipher</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homework 2 - Dataset & Caesar Cipher</title>
 
-  <!-- Inter font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bg: #fbfcfd;
-      --card-bg: #ffffff;
-      --text: #0f1724;
-      --muted: #667085;
-      --accent-a: #0ea5a0;
-      --accent-b: #ff7a59;
-      --accent-c: #374151;
-      --radius: 12px;
-      --shadow: 0 8px 20px rgba(15,23,42,0.06);
-    }
+<style>
+:root{
+  --bg: #f5f6fa;
+  --card-bg: #ffffff;
+  --text: #1e293b;
+  --muted: #475569;
+  --accent-a: #0ea5e9;
+  --accent-b: #f97316;
+  --radius: 12px;
+  --shadow: 0 8px 20px rgba(30,41,59,0.08);
+}
 
-    body{
-      font-family: 'Inter', sans-serif;
-      margin:0;
-      padding:0;
-      background: var(--bg);
-      color: var(--text);
-      line-height:1.6;
-    }
+body{
+  font-family:'Inter', sans-serif;
+  margin:0;
+  padding:0;
+  background: var(--bg);
+  color: var(--text);
+  line-height:1.6;
+}
 
-    a { color: var(--accent-c); text-decoration: none; }
-    a:hover { color: var(--accent-b); }
+a { color: var(--accent-a); text-decoration: none; }
+a:hover { color: var(--accent-b); }
 
-    .wrap {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
+.wrap {
+  max-width:900px;
+  margin:0 auto;
+  padding:40px 20px;
+}
 
-    header, footer { text-align:center; margin-bottom:24px; }
+header, footer { text-align:center; margin-bottom:24px; }
 
-    h1 {
-      font-size:2rem;
-      color: var(--accent-c);
-      margin-bottom:16px;
-    }
+h1{ font-size:2rem; color: var(--accent-a); margin-bottom:16px; }
+h2{ font-size:1.4rem; color: var(--accent-b); margin-top:32px; margin-bottom:12px; }
+p{ font-size:1rem; margin-bottom:12px; color: var(--muted); }
 
-    h2 {
-      font-size:1.4rem;
-      color: var(--accent-a);
-      margin-top:32px;
-      margin-bottom:12px;
-    }
+.card {
+  background: var(--card-bg);
+  padding:20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom:24px;
+}
 
-    p { font-size:1rem; margin-bottom:12px; color: var(--muted); }
+table {
+  width:100%;
+  border-collapse: collapse;
+  margin-top:12px;
+  margin-bottom:12px;
+}
+table, th, td { border:1px solid #ddd; }
+th, td { padding:8px; text-align:center; }
+th { background: var(--accent-a); color:white; }
 
-    .card {
-      background: var(--card-bg);
-      padding:20px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-bottom:24px;
-    }
+input, textarea, button {
+  font-family:'Inter', sans-serif;
+  font-size:1rem;
+  padding:6px 10px;
+  margin:6px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+button{
+  background: var(--accent-b);
+  color:white;
+  cursor:pointer;
+  border:none;
+  transition:0.2s;
+}
+button:hover{ background: var(--accent-a); }
 
-    table {
-      width:100%;
-      border-collapse: collapse;
-      margin-top:12px;
-      margin-bottom:12px;
-    }
+.translator{ display:flex; flex-direction:column; gap:10px; margin-top:12px; }
 
-    table, th, td {
-      border:1px solid #ddd;
-    }
+footer{
+  font-size:0.85rem;
+  color: var(--muted);
+  border-top:1px solid #ddd;
+  padding-top:20px;
+  margin-top:40px;
+}
 
-    th, td {
-      padding:8px;
-      text-align:center;
-    }
-
-    th { background: var(--accent-a); color:white; }
-
-    input, textarea, button {
-      font-family: 'Inter', sans-serif;
-      font-size:1rem;
-      padding:6px 10px;
-      margin:6px 0;
-      border-radius:8px;
-      border:1px solid #ccc;
-    }
-
-    button {
-      background: var(--accent-b);
-      color:white;
-      cursor:pointer;
-      border:none;
-      transition:0.2s;
-    }
-
-    button:hover { background: var(--accent-a); }
-
-    .translator {
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top:12px;
-    }
-
-    footer {
-      font-size:0.85rem;
-      color: var(--muted);
-      border-top:1px solid #eee;
-      padding-top:20px;
-      margin-top:40px;
-    }
-
-    @media(max-width:600px){
-      h1{ font-size:1.6rem;}
-      h2{ font-size:1.2rem;}
-    }
-  </style>
+@media(max-width:600px){
+  h1{ font-size:1.6rem;}
+  h2{ font-size:1.2rem;}
+}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- Header -->
-    <header>
-      <h1>Homework 2 — Dataset & Caesar Cipher</h1>
-      <a href="../index.html">← Back to Home</a>
-    </header>
+<div class="wrap">
 
-    <!-- Part 1: Dataset & Distributions -->
-    <div class="card">
-      <h2>Part 1: Dataset & Distributions</h2>
-      <p>This dataset represents a simple example of customer purchases:</p>
+<!-- Header -->
+<header>
+<h1>Homework 2 — Dataset & Caesar Cipher</h1>
+<a href="../index.html">← Back to Home</a>
+</header>
 
-      <table>
-        <tr><th>Customer</th><th>Product</th><th>Quantity</th></tr>
-        <tr><td>Alice</td><td>Pen</td><td>5</td></tr>
-        <tr><td>Bob</td><td>Notebook</td><td>3</td></tr>
-        <tr><td>Charlie</td><td>Pen</td><td>2</td></tr>
-        <tr><td>Alice</td><td>Notebook</td><td>1</td></tr>
-        <tr><td>Bob</td><td>Pen</td><td>4</td></tr>
-      </table>
+<!-- Part 1: Dataset & Distributions -->
+<div class="card">
+<h2>Part 1: Understanding Dataset & Distributions</h2>
 
-      <h2>Univariate Distributions</h2>
-      <p>Example: Count of products purchased:</p>
-      <table>
-        <tr><th>Product</th><th>Count</th></tr>
-        <tr><td>Pen</td><td>3</td></tr>
-        <tr><td>Notebook</td><td>2</td></tr>
-      </table>
+<p>In cybersecurity, analyzing datasets can help identify patterns such as login attempts, suspicious IPs, and user behavior. A <strong>dataset</strong> is a structured collection of data, typically organized in rows (records) and columns (variables).</p>
 
-      <h2>Bivariate Distribution</h2>
-      <p>Example: Customer × Product:</p>
-      <table>
-        <tr><th>Customer</th><th>Pen</th><th>Notebook</th></tr>
-        <tr><td>Alice</td><td>5</td><td>1</td></tr>
-        <tr><td>Bob</td><td>4</td><td>3</td></tr>
-        <tr><td>Charlie</td><td>2</td><td>0</td></tr>
-      </table>
-    </div>
+<p>A <strong>variable</strong> is a characteristic or attribute measured in the dataset. Univariate analysis looks at one variable at a time, while bivariate analysis explores the relationship between two variables.</p>
 
-    <!-- Part 2: Text & Caesar Cipher -->
-    <div class="card">
-      <h2>Part 2: Text Analysis & Caesar Cipher</h2>
-      <p>Sample text: <i>"HELLO WORLD"</i></p>
+<h3>Sample Dataset: Login Attempts</h3>
 
-      <h2>Letter Distribution</h2>
-      <table>
-        <tr><th>Letter</th><th>Count</th></tr>
-        <tr><td>H</td><td>1</td></tr>
-        <tr><td>E</td><td>1</td></tr>
-        <tr><td>L</td><td>3</td></tr>
-        <tr><td>O</td><td>2</td></tr>
-        <tr><td>W</td><td>1</td></tr>
-        <tr><td>R</td><td>1</td></tr>
-        <tr><td>D</td><td>1</td></tr>
-      </table>
+<p>This dataset represents login attempts from different users:</p>
 
-      <h2>Caesar Cipher Translator</h2>
-      <div class="translator">
-        <label>Enter text to encrypt:</label>
-        <input id="inputText" type="text" value="HELLO WORLD">
-        <label>Shift (number):</label>
-        <input id="shift" type="number" value="3">
-        <button onclick="encryptText()">Encrypt</button>
-        <label>Encrypted text:</label>
-        <textarea id="encrypted" readonly></textarea>
-        <button onclick="decryptText()">Decrypt</button>
-        <label>Decrypted text:</label>
-        <textarea id="decrypted" readonly></textarea>
-      </div>
+<table>
+<tr><th>User</th><th>IP Address</th><th>Status</th></tr>
+<tr><td>Alice</td><td>192.168.1.10</td><td>Success</td></tr>
+<tr><td>Bob</td><td>192.168.1.15</td><td>Failed</td></tr>
+<tr><td>Charlie</td><td>192.168.1.20</td><td>Success</td></tr>
+<tr><td>Alice</td><td>192.168.1.10</td><td>Failed</td></tr>
+<tr><td>Bob</td><td>192.168.1.15</td><td>Failed</td></tr>
+</table>
 
-      <script>
-        function caesarEncrypt(str, shift) {
-          return str.toUpperCase().split('').map(c=>{
-            if(c>='A' && c<='Z'){
-              return String.fromCharCode((c.charCodeAt(0)-65+shift)%26+65);
-            }else{return c;}
-          }).join('');
-        }
+<h3>Univariate Distribution</h3>
+<p>Example: Count of each login status:</p>
 
-        function caesarDecrypt(str, shift) {
-          return caesarEncrypt(str, (26-shift)%26);
-        }
+<table>
+<tr><th>Status</th><th>Count</th></tr>
+<tr><td>Success</td><td>2</td></tr>
+<tr><td>Failed</td><td>3</td></tr>
+</table>
 
-        function encryptText(){
-          const text = document.getElementById('inputText').value;
-          const shift = parseInt(document.getElementById('shift').value);
-          document.getElementById('encrypted').value = caesarEncrypt(text, shift);
-          document.getElementById('decrypted').value = '';
-        }
+<h3>Bivariate Distribution</h3>
+<p>Example: User × Status combination:</p>
 
-        function decryptText(){
-          const text = document.getElementById('encrypted').value;
-          const shift = parseInt(document.getElementById('shift').value);
-          document.getElementById('decrypted').value = caesarDecrypt(text, shift);
-        }
-      </script>
+<table>
+<tr><th>User</th><th>Success</th><th>Failed</th></tr>
+<tr><td>Alice</td><td>1</td><td>1</td></tr>
+<tr><td>Bob</td><td>0</td><td>2</td></tr>
+<tr><td>Charlie</td><td>1</td><td>0</td></tr>
+</table>
 
-    </div>
+</div>
 
-    <footer>
-      &copy; 2025 Javid Farzaliyev — La Sapienza University
-    </footer>
-  </div>
+<!-- Part 2: Caesar Cipher -->
+<div class="card">
+<h2>Part 2: Text Analysis & Caesar Cipher</h2>
+
+<p>We can also explore **text analysis**. For example, computing the distribution of letters in a message and encrypting it using a Caesar cipher.</p>
+
+<h3>Interactive Caesar Cipher App</h3>
+<div class="translator">
+<label>Enter your text:</label>
+<input id="inputText" type="text" value="HELLO WORLD">
+<label>Shift (number):</label>
+<input id="shift" type="number" value="3">
+<button onclick="encryptText()">Encrypt Text</button>
+<label>Encrypted Text:</label>
+<textarea id="encrypted" readonly></textarea>
+<button onclick="decryptText()">Decrypt Text</button>
+<label>Decrypted Text:</label>
+<textarea id="decrypted" readonly></textarea>
+
+<h3>Letter Frequency Distribution</h3>
+<p>This will update automatically when you encrypt text.</p>
+<canvas id="freqChart" width="400" height="200" style="border:1px solid #ddd; background:#fff;"></canvas>
+</div>
+
+<script>
+// Caesar Cipher Functions
+function caesarEncrypt(str, shift) {
+  return str.toUpperCase().split('').map(c=>{
+    if(c>='A' && c<='Z'){
+      return String.fromCharCode((c.charCodeAt(0)-65+shift)%26+65);
+    } else { return c; }
+  }).join('');
+}
+
+function caesarDecrypt(str, shift) {
+  return caesarEncrypt(str,(26-shift)%26);
+}
+
+function encryptText(){
+  const text=document.getElementById('inputText').value;
+  const shift=parseInt(document.getElementById('shift').value);
+  const encrypted=caesarEncrypt(text,shift);
+  document.getElementById('encrypted').value=encrypted;
+  document.getElementById('decrypted').value='';
+  drawFreqChart(encrypted);
+}
+
+function decryptText(){
+  const text=document.getElementById('encrypted').value;
+  const shift=parseInt(document.getElementById('shift').value);
+  document.getElementById('decrypted').value=caesarDecrypt(text,shift);
+}
+
+// Letter Frequency Chart
+function drawFreqChart(text){
+  const canvas=document.getElementById('freqChart');
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const counts={};
+  text.toUpperCase().replace(/[^A-Z]/g,'').split('').forEach(c=>{
+    counts[c]=counts[c]?counts[c]+1:1;
+  });
+  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const max=Math.max(...letters.map(l=>counts[l]||0));
+  letters.forEach((l,i)=>{
+    const h=(counts[l]||0)/max*canvas.height*0.8;
+    ctx.fillStyle='#0ea5e9';
+    ctx.fillRect(i*15+5,canvas.height-h,10,h);
+    ctx.fillStyle='#000';
+    ctx.fillText(l,i*15+5,canvas.height-5);
+  });
+}
+
+drawFreqChart(document.getElementById('inputText').value);
+</script>
+
+</div>
+
+<footer>
+&copy; 2025 Javid Farzaliyev — La Sapienza University
+</footer>
+
+</div>
 </body>
 </html>
