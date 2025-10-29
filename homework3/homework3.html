@@ -120,12 +120,27 @@ button.ghost{background:#fff;color:var(--accent-a);border:1px solid #e6e9ee;}
 <body>
   <div class="container">
 
-    
+    <!-- header -->
+    <div class="header">
+      <a class="brand" href="../index.html" aria-label="Home">
+        <div class="brand-mark">SB</div>
+        <div class="brand-title">
+          <div class="title">Statistics Blog</div>
+          <div class="subtitle">Student projects & homework</div>
+        </div>
+      </a>
+
+      <nav style="display:flex;gap:10px;align-items:center;">
+        <a href="../index.html" style="color:var(--muted);text-decoration:none;">Home</a>
+        <a href="../homework1/homework1.html" style="color:var(--muted);text-decoration:none;">HW1</a>
+        <a href="../homework2/homework2.html" style="color:var(--muted);text-decoration:none;">HW2</a>
+      </nav>
+    </div>
 
     <!-- title -->
     <div class="page-title">
       <h1>Homework 3 — RSA & Reference Distribution</h1>
-      <p>This page demonstrates RSA per-character encryption and a reference-distribution attack that attempts to recover plaintext without the private key. The script is external (<code>script.js</code>) and visible below for inspection.</p>
+      <p>This page demonstrates RSA per-character encryption and a reference-distribution attack that attempts to recover plaintext without the private key.</p>
     </div>
 
     <!-- detailed explanation (replaces previous short block) -->
@@ -231,7 +246,7 @@ button.ghost{background:#fff;color:var(--accent-a);border:1px solid #e6e9ee;}
 
       <div class="code-toggle">
         <button onclick="toggleCode()">Show / Hide script.js</button>
-        <div class="small">The script file is loaded externally and the same content is displayed below so your professor can scroll through it.</div>
+        <div class="small">Professor can expand this to read `script.js` used for encryption & decoding.</div>
       </div>
 
       <div id="codeBlock" class="code-block" aria-hidden="true">
@@ -258,7 +273,6 @@ button.ghost{background:#fff;color:var(--accent-a);border:1px solid #e6e9ee;}
       try{
         const r = await fetch('script.js');
         const txt = await r.text();
-        // escape for display (pre + code protects, but keep raw)
         area.textContent = txt;
       }catch(e){
         area.textContent = 'Could not load script.js: ' + e;
