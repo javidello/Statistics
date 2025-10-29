@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Homework 4 — Law of Large Numbers</title>
+
+<!-- Inter font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root{
+  --bg:#f5f6fa;
+  --card:#ffffff;
+  --text:#172031;
+  --muted:#475569;
+  --accent-a:#0ea5e9;
+  --accent-b:#f97316;
+  --radius:12px;
+  --shadow:0 10px 30px rgba(17,24,39,0.06);
+  --max-w:980px;
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.6;
+}
+
+.container{max-width:var(--max-w);margin:28px auto;padding:28px;}
+
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-mark{width:46px;height:46px;border-radius:10px;display:inline-grid;place-items:center;color:white;font-weight:700;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));font-size:16px;box-shadow:0 8px 20px rgba(14,165,233,0.08);}
+.brand-title .title{font-weight:700;color:var(--accent-b);font-size:1rem;}
+.brand-title .subtitle{font-size:0.85rem;color:var(--muted);}
+
+.page-title{margin:6px 0 12px 0;}
+.page-title h1{margin:0;font-size:1.7rem;color:var(--accent-a);}
+.page-title p{margin:8px 0 0;color:var(--muted);font-size:1rem;}
+
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;}
+
+h2{color:var(--accent-b);margin:0 0 10px 0;font-size:1.15rem;}
+h3{margin:12px 0 8px 0;color:var(--accent-a);font-size:1rem;}
+p,li{color:var(--muted);font-size:1rem;margin:8px 0;}
+small{color:var(--muted);}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;}
+table,th,td{border:1px solid #e6e9ee;}
+th,td{padding:8px;text-align:center;font-size:0.95rem;}
+th{background:var(--accent-a);color:#fff;font-weight:600;}
+pre{background:#f3f4f6;padding:10px;border-radius:8px;overflow:auto;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;font-size:0.95rem;}
+
+label{display:block;margin-top:8px;font-weight:600;color:var(--text);}
+input[type="number"], input[type="text"], select, textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ee;font-size:1rem;box-sizing:border-box;color:var(--text);}
+.row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.row> *{flex:1 1 160px;}
+button{background:var(--accent-b);color:#fff;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600;}
+button.ghost{background:#fff;color:var(--accent-a);border:1px solid #e6e9ee;}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+
+.code-toggle{display:flex;gap:10px;align-items:center;margin-top:12px;}
+.code-block{display:none;margin-top:12px;background:#fff;padding:12px;border-radius:10px;border:1px solid #eef2f6;white-space:pre-wrap;}
+
+.footer{margin-top:20px;padding-top:18px;border-top:1px solid #eef2f6;color:var(--muted);text-align:center;font-size:0.95rem;}
+
+@media(max-width:760px){
+  .grid-2{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <a class="brand" href="../index.html" aria-label="Home">
+        <div class="brand-mark">SB</div>
+        <div class="brand-title">
+          <div class="title">Statistics Blog</div>
+          <div class="subtitle">Student projects & homework</div>
+        </div>
+      </a>
+      <nav style="display:flex;gap:10px;align-items:center;">
+        <a href="../index.html" style="color:var(--muted);text-decoration:none;">Home</a>
+        <a href="../homework1/homework1.html" style="color:var(--muted);text-decoration:none;">HW1</a>
+        <a href="../homework2/homework2.html" style="color:var(--muted);text-decoration:none;">HW2</a>
+        <a href="../homework3/homework3.html" style="color:var(--muted);text-decoration:none;">HW3</a>
+      </nav>
+    </div>
+
+    <div class="page-title">
+      <h1>Homework 4 — Law of Large Numbers</h1>
+      <p>Definitions, formulas, and interactive simulations of relative frequency trajectories (Bernoulli trials). Use the controls to run experiments and visualize convergence.</p>
+    </div>
+
+    <!-- Explanation -->
+    <section class="card">
+      <h2>Definition & explanation</h2>
+
+      <p><strong>Law of Large Numbers (LLN)</strong> — informally: as the number of independent, identically distributed (i.i.d.) trials increases, the sample average (or relative frequency) converges to the expected value.</p>
+
+      <h3>Weak Law (WLLN)</h3>
+      <p>Let \(X_1, X_2, \dots\) be i.i.d. random variables with finite expectation \(\mu = E[X_i]\). Define the sample mean \(\overline{X}_n = \frac{1}{n}\sum_{i=1}^n X_i\). For every \(\varepsilon > 0\):</p>
+      <p style="font-family:ui-monospace, monospace;"><strong>\(\lim_{n\to\infty} P(|\overline{X}_n - \mu| > \varepsilon) = 0.\)</strong></p>
+      <p>Meaning: for large \(n\), \(\overline{X}_n\) is close to \(\mu\) with high probability.</p>
+
+      <h3>Strong Law (SLLN)</h3>
+      <p>Under the same assumptions, the strong law states:</p>
+      <p style="font-family:ui-monospace, monospace;"><strong>\(P(\lim_{n\to\infty} \overline{X}_n = \mu) = 1.\)</strong></p>
+      <p>This is a stronger statement: with probability 1 the sample mean converges to \(\mu\).</p>
+
+      <h3>Example: Bernoulli trials</h3>
+      <p>Let each \(X_i\) be a Bernoulli random variable with parameter \(p\) (success probability): \(X_i \in \{0,1\}\), \(P(X_i=1)=p\). Then \(\mu = p\), and the LLN implies the relative frequency of successes \(\frac{1}{n}\sum X_i\) converges to \(p\).</p>
+
+      <h3>Why this matters in practice</h3>
+      <ul>
+        <li>LLN gives theoretical foundations for frequency-based estimates (e.g., estimating probability by frequency).</li>
+        <li>Simulations let you observe convergence behavior, variance of trajectories, and how many trials you need for a given accuracy.</li>
+      </ul>
+    </section>
+
+    <!-- Controls -->
+    <section class="card">
+      <h2>Simulation controls</h2>
+
+      <div class="grid-2">
+        <div>
+          <label for="p">Success probability \(p\)</label>
+          <input id="p" type="number" value="0.3" min="0" max="1" step="0.01">
+
+          <label for="n">Number of trials per run \(n\)</label>
+          <input id="n" type="number" value="500" min="10" max="100000" step="10">
+
+          <label for="runs">Number of runs (for histogram / ensemble)</label>
+          <input id="runs" type="number" value="500" min="1" max="2000" step="1">
+        </div>
+
+        <div>
+          <label for="sampleTraj">Number of sample trajectories to plot</label>
+          <input id="sampleTraj" type="number" value="6" min="1" max="30" step="1">
+
+          <label for="seed">(Optional) Random seed (leave empty for random)</label>
+          <input id="seed" type="text" placeholder="e.g. 12345">
+
+          <div class="row" style="margin-top:12px;">
+            <button id="runBtn">Run simulation</button>
+            <button id="ensembleBtn" class="ghost">Run ensemble (histogram)</button>
+            <button id="clearBtn" class="ghost">Clear</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="card">
+      <h2>Visualizations</h2>
+      <p class="small">Top: relative frequency trajectories (each run shows 1..n). Bottom: histogram of final relative frequencies across many runs compared with theoretical value \(p\).</p>
+
+      <div style="margin-top:12px;">
+        <canvas id="trajChart" width="900" height="350"></canvas>
+      </div>
+
+      <div style="margin-top:18px;">
+        <canvas id="histChart" width="900" height="220"></canvas>
+      </div>
+    </section>
+
+    <!-- Code viewer -->
+    <section class="card">
+      <h2>JavaScript source (simulation)</h2>
+      <div class="code-toggle">
+        <button onclick="toggleCode()">Show / Hide JS source</button>
+        <div class="small">The script that runs the simulation and drawing is shown here for inspection.</div>
+      </div>
+      <div id="codeBlock" class="code-block" aria-hidden="true">
+        <pre id="sourceArea"><code>Loading script...</code></pre>
+      </div>
+    </section>
+
+    <div class="footer">
+      &copy; 2025 Javid Farzaliyev — La Sapienza University
+    </div>
+  </div>
+
+<!-- Application script placed in a script element with id so we can also display it -->
+<script id="appScript" type="text/javascript">
+// =================== Homework 4 — LLN simulation script ===================
+// This script simulates Bernoulli trials, plots relative-frequency trajectories
+// and a histogram of final frequencies. It is bundled in this HTML and also
+// displayed below when "Show / Hide JS source" is clicked.
+
+// Utility: simple seeded PRNG (linear congruential) for reproducible runs when seed given
+function makeRNG(seed) {
+  if (seed == null || seed === '') {
+    return { random: () => Math.random() };
+  }
+  // simple LCG constants
+  let s = Number(seed) >>> 0;
+  if (s === 0) s = 1;
+  return {
+    random: function() {
+      s = (1664525 * s + 1013904223) >>> 0;
+      return s / 4294967296;
+    }
+  };
+}
+
+// simulate one run of n Bernoulli(p) and return array of relative frequencies (length n)
+function simulateRun(p, n, rng) {
+  const freqs = new Array(n);
+  let successes = 0;
+  for (let i = 1; i <= n; i++) {
+    const u = rng.random();
+    if (u < p) successes++;
+    freqs[i - 1] = successes / i;
+  }
+  return freqs;
+}
+
+// run multiple runs and return array of final frequencies
+function ensembleFinalFrequencies(p, n, runs, rngFactory) {
+  const finals = [];
+  for (let r = 0; r < runs; r++) {
+    const rng = rngFactory();
+    const freqs = simulateRun(p, n, rng);
+    finals.push(freqs[freqs.length - 1]);
+  }
+  return finals;
+}
+
+// helper: compute histogram counts for given bins
+function histogram(values, binCount) {
+  const min = 0, max = 1;
+  const counts = new Array(binCount).fill(0);
+  const binWidth = (max - min) / binCount;
+  values.forEach(v => {
+    const idx = Math.min(binCount - 1, Math.floor((v - min) / binWidth));
+    counts[idx] += 1;
+  });
+  return { counts, binWidth, min, max };
+}
+
+// Chart.js charts (initialized later)
+let trajChart = null;
+let histChart = null;
+
+// color palette for sample trajectories
+const COLORS = ['#0ea5e9','#f97316','#06b6d4','#7c3aed','#ef4444','#10b981','#f59e0b','#8b5cf6','#06b6d4','#ef4444'];
+
+// initialize empty charts
+function initCharts() {
+  const tctx = document.getElementById('trajChart').getContext('2d');
+  if (trajChart) { trajChart.destroy(); trajChart = null; }
+  trajChart = new Chart(tctx, {
+    type: 'line',
+    data: { labels: [], datasets: [] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { title: { display: true, text: 'Trial index (n)' } },
+        y: { min: 0, max: 1, title: { display: true, text: 'Relative frequency' } }
+      },
+      plugins: {
+        legend: { display: true, position: 'top' }
+      },
+      elements: { point: { radius: 0 } }
+    }
+  });
+
+  const hctx = document.getElementById('histChart').getContext('2d');
+  if (histChart) { histChart.destroy(); histChart = null; }
+  histChart = new Chart(hctx, {
+    type: 'bar',
+    data: { labels: [], datasets: [{ label:'Count', data: [], backgroundColor: '#0ea5e9' }] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { title: { display: true, text: 'Final relative frequency (bins)' } },
+        y: { title: { display: true, text: 'Count' } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+// update trajectory chart with arrays of trajectories (each an array of length n)
+function updateTrajChart(trajectories, p) {
+  const n = trajectories.length ? trajectories[0].length : 0;
+  const labels = Array.from({length: n}, (_, i) => i+1);
+  const datasets = trajectories.map((traj, idx) => ({
+    label: 'Run ' + (idx+1),
+    data: traj,
+    borderColor: COLORS[idx % COLORS.length],
+    borderWidth: 1.5,
+    fill: false,
+    tension: 0.15
+  }));
+
+  // average trajectory
+  if (trajectories.length > 0) {
+    const avg = new Array(n).fill(0);
+    trajectories.forEach(tr => tr.forEach((v,i)=> avg[i]+=v));
+    avg.forEach((_,i)=> avg[i] = avg[i] / trajectories.length);
+    datasets.push({
+      label: 'Average',
+      data: avg,
+      borderColor: '#111827',
+      borderWidth: 2,
+      borderDash: [6,4],
+      fill: false,
+      tension: 0.15
+    });
+  }
+
+  // theoretical line p (horizontal)
+  datasets.push({
+    label: 'Theoretical p',
+    data: Array.from({length:n}, ()=> p),
+    borderColor: '#ef4444',
+    borderWidth: 1.5,
+    borderDash: [4,4],
+    pointRadius: 0,
+    fill: false
+  });
+
+  trajChart.data.labels = labels;
+  trajChart.data.datasets = datasets;
+  trajChart.update();
+}
+
+// update histogram of finals
+function updateHistChart(finals, binCount, p) {
+  const {counts, binWidth, min} = histogram(finals, binCount);
+  const labels = counts.map((_,i) => {
+    const left = (min + i*binWidth).toFixed(2);
+    const right = (min + (i+1)*binWidth).toFixed(2);
+    return `${left}–${right}`;
+  });
+  histChart.data.labels = labels;
+  histChart.data.datasets[0].data = counts;
+  histChart.update();
+
+  // draw a vertical line for p by using plugin? easiest: add an annotation dataset (thin bar overlay)
+  // we will not add plugin here; instead just log p to console and show in label
+  // alternatively, add a small overlay by shading the nearest bin (not implemented to keep Chart.js simple)
+  console.log('theoretical p =', p);
+}
+
+// UI wiring
+document.getElementById('runBtn').addEventListener('click', ()=> {
+  const p = parseFloat(document.getElementById('p').value);
+  const n = parseInt(document.getElementById('n').value);
+  const sampleTraj = parseInt(document.getElementById('sampleTraj').value);
+  const seed = document.getElementById('seed').value;
+  if (isNaN(p) || isNaN(n) || isNaN(sampleTraj) || p<0 || p>1) { alert('Please enter valid parameters.'); return; }
+  initCharts();
+  const rngFactory = ()=> makeRNG(seed || Math.floor(Math.random()*1e9));
+  const trajectories = [];
+  for (let k=0; k<sampleTraj; k++){
+    const rng = rngFactory();
+    const traj = simulateRun(p, n, rng);
+    trajectories.push(traj);
+  }
+  updateTrajChart(trajectories, p);
+});
+
+document.getElementById('ensembleBtn').addEventListener('click', ()=> {
+  const p = parseFloat(document.getElementById('p').value);
+  const n = parseInt(document.getElementById('n').value);
+  const runs = parseInt(document.getElementById('runs').value);
+  const seed = document.getElementById('seed').value;
+  if (isNaN(p) || isNaN(n) || isNaN(runs) || p<0 || p>1) { alert('Please enter valid parameters.'); return; }
+  initCharts();
+  const rngFactory = ()=> makeRNG(seed || Math.floor(Math.random()*1e9));
+  // compute many final frequencies
+  const finals = ensembleFinalFrequencies(p, n, runs, rngFactory);
+  updateHistChart(finals, 20, p);
+});
+
+document.getElementById('clearBtn').addEventListener('click', ()=> {
+  initCharts();
+  document.getElementById('sourceArea').textContent = document.getElementById('appScript').textContent;
+  document.getElementById('codeBlock').style.display = 'none';
+});
+
+// initialize charts and show JS source inside code block when requested
+initCharts();
+document.getElementById('sourceArea').textContent = document.getElementById('appScript').textContent;
+
+// toggle code viewer
+function toggleCode(){
+  const block = document.getElementById('codeBlock');
+  if(!block) return;
+  if(block.style.display === 'block'){ block.style.display='none'; block.setAttribute('aria-hidden','true'); return; }
+  block.style.display = 'block';
+  block.setAttribute('aria-hidden','false');
+  window.scrollTo({ top: block.offsetTop - 20, behavior: 'smooth' });
+}
+</script>
+
+<!-- expose toggle function globally for the button -->
+<script>
+  // attach toggleCode to window so the button can call it in older browsers
+  window.toggleCode = function(){ 
+    const block = document.getElementById('codeBlock');
+    if(!block) return;
+    if(block.style.display === 'block'){ block.style.display='none'; block.setAttribute('aria-hidden','true'); return; }
+    // lazy-fill code if still "Loading"
+    const area = document.getElementById('sourceArea');
+    if(area && area.textContent.trim() === 'Loading script...') {
+      const text = document.getElementById('appScript').textContent || '';
+      area.textContent = text;
+    }
+    block.style.display = 'block'; block.setAttribute('aria-hidden','false');
+    window.scrollTo({ top: block.offsetTop - 20, behavior: 'smooth' });
+  };
+</script>
+
+</body>
+</html>
