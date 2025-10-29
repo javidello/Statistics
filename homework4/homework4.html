@@ -85,22 +85,26 @@ button.ghost{background:#fff;color:var(--accent-a);border:1px solid #e6e9ee;}
     <p><strong>Law of Large Numbers (LLN):</strong> as the number of independent, identically distributed trials increases, the sample mean converges to the expected value.</p>
 
     <h3>Weak Law</h3>
+    <p>The sample mean converges <em>in probability</em> to the expected value. This means the probability that the sample mean is far from the expected value becomes very small as the number of trials grows.</p>
     <div class="math-box">
       \( \overline{X}_n = \frac{1}{n}\sum_{i=1}^n X_i , \quad
       \lim_{n\to\infty} P(|\overline{X}_n - \mu| > \varepsilon) = 0 \)
     </div>
 
     <h3>Strong Law</h3>
+    <p>The sample mean converges <em>almost surely</em> to the expected value. With an infinite number of trials, the sample mean equals the expected value with probability 1.</p>
     <div class="math-box">
       \( P\!\left(\lim_{n\to\infty} \overline{X}_n = \mu\right) = 1 \)
     </div>
 
     <h3>Bernoulli Example</h3>
+    <p>A Bernoulli variable has only two outcomes: success (1) or failure (0). Probability of success is p, failure is 1-p.</p>
     <div class="math-box">
       \( X_i \in \{0,1\},\ E[X_i]=p,\ \overline{X}_n = \frac{1}{n}\sum X_i \xrightarrow{n\to\infty} p \)
     </div>
 
     <h3>Chebyshev Inequality</h3>
+    <p>Provides an upper bound for the probability that the sample mean deviates from the expected value by more than ε. Useful when the shape of the distribution is unknown.</p>
     <div class="math-box">
       \( P(|\overline{X}_n - \mu| \ge \varepsilon) \le \frac{\sigma^2}{n\varepsilon^2} \)
     </div>
