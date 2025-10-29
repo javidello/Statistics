@@ -1,162 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homework 4 – Law of Large Numbers</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-  </script>
-  <style>
-    body {
-      font-family: "Inter", sans-serif;
-      background-color: #f7f8fc;
-      color: #222;
-      margin: 0;
-      padding: 0;
-      line-height: 1.7;
-    }
-    header {
-      background: linear-gradient(135deg, #7289da, #a3bffa);
-      color: white;
-      text-align: center;
-      padding: 2rem 0;
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
-    }
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      background: #fff;
-      border-radius: 16px;
-      padding: 2.5rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    }
-    h1, h2, h3 {
-      color: #2f2f75;
-    }
-    .formula {
-      background: #f1f3fb;
-      padding: 1rem;
-      border-radius: 12px;
-      text-align: center;
-      margin: 1.2rem 0;
-      font-size: 1.2rem;
-      font-weight: 500;
-    }
-    #chartContainer {
-      text-align: center;
-      margin-top: 30px;
-    }
-    canvas {
-      width: 100%;
-      max-width: 700px;
-      height: 400px;
-      margin: 0 auto;
-      display: block;
-    }
-    footer {
-      text-align: center;
-      padding: 1.5rem 0;
-      color: #777;
-      font-size: 0.9rem;
-      border-top: 1px solid #eaeaea;
-      margin-top: 40px;
-    }
-    button {
-      background-color: #7289da;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-top: 10px;
-    }
-    button:hover {
-      background-color: #5b6fc8;
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Homework 4 — Law of Large Numbers</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+<style>
+:root{
+  --bg:#f5f6fa;
+  --card:#ffffff;
+  --text:#172031;
+  --muted:#475569;
+  --accent-a:#0ea5e9;
+  --accent-b:#f97316;
+  --radius:12px;
+  --shadow:0 10px 30px rgba(17,24,39,0.06);
+  --max-w:980px;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
+.container{max-width:var(--max-w);margin:28px auto;padding:28px;}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.brand-mark{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;
+  color:#fff;font-weight:700;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));
+  box-shadow:0 8px 20px rgba(14,165,233,0.08);}
+.brand-title .title{font-weight:700;color:var(--accent-b);}
+.brand-title .subtitle{font-size:0.85rem;color:var(--muted);}
+nav a{color:var(--muted);text-decoration:none;margin-left:10px;}
+.page-title h1{margin:0;font-size:1.7rem;color:var(--accent-a);}
+.page-title p{margin:6px 0 0;color:var(--muted);}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;}
+h2{color:var(--accent-b);}
+h3{color:var(--accent-a);}
+p,li{color:var(--muted);}
+.math-box{background:#f3f6fb;border-radius:10px;padding:12px;margin:12px 0;border:1px solid #e9f0fb;text-align:center;}
+input,button{font-family:inherit;}
+button{background:var(--accent-b);color:#fff;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600;}
+button.ghost{background:#fff;color:var(--accent-a);border:1px solid #e6e9ee;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:760px){.grid-2{grid-template-columns:1fr;}}
+.canvas-wrap{background:#fff;padding:12px;border-radius:10px;border:1px solid #eef2f6;}
+.canvas{width:100%;height:320px;}
+.footer{margin-top:20px;padding-top:18px;border-top:1px solid #eef2f6;color:var(--muted);text-align:center;font-size:0.95rem;}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Homework 4 – Law of Large Numbers</h1>
-    <p>Statistics & Cybersecurity | Simulation and Visualization</p>
-  </header>
+<div class="container">
 
-  <main>
-    <h2>Definition</h2>
-    <p>
-      The <b>Law of Large Numbers (LLN)</b> states that as the number of independent trials increases, 
-      the <i>sample mean</i> (average of the results) approaches the <i>expected value</i> (theoretical mean).
-      In other words, with enough data, random outcomes stabilize around a predictable value.
-    </p>
+  <div class="header">
+    <a class="brand" href="../index.html">
+      <div class="brand-mark">S</div>
+      <div class="brand-title">
+        <div class="title">Statistics</div>
+      </div>
+    </a>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../homework1/homework1.html">HW1</a>
+      <a href="../homework2/homework2.html">HW2</a>
+      <a href="../homework3/homework3.html">HW3</a>
+    </nav>
+  </div>
 
-    <div class="formula">
-      $$ \lim_{n \to \infty} \bar{X}_n = \mu $$
+  <div class="page-title">
+    <h1>Homework 4 — Law of Large Numbers</h1>
+    <p>Definition, explanation, formulas, and simulation of relative-frequency trajectories.</p>
+  </div>
+
+  <section class="card">
+    <h2>Definition & Background</h2>
+
+    <p><strong>Law of Large Numbers (LLN):</strong> as the number of independent, identically distributed trials increases, the sample mean converges to the expected value.</p>
+
+    <h3>Weak Law</h3>
+    <div class="math-box">
+      \( \overline{X}_n = \frac{1}{n}\sum_{i=1}^n X_i , \quad
+      \lim_{n\to\infty} P(|\overline{X}_n - \mu| > \varepsilon) = 0 \)
     </div>
 
-    <h2>Explanation</h2>
-    <p>
-      Suppose we repeat the same experiment many times — for instance, tossing a fair coin.
-      Each toss can be represented by a random variable:
-      \[
-        X_i = 
-        \begin{cases}
-          1 & \text{if Head} \\
-          0 & \text{if Tail}
-        \end{cases}
-      \]
-      The sample mean after \( n \) tosses is:
-    </p>
-
-    <div class="formula">
-      $$ \bar{X}_n = \frac{1}{n}\sum_{i=1}^{n} X_i $$
+    <h3>Strong Law</h3>
+    <div class="math-box">
+      \( P\!\left(\lim_{n\to\infty} \overline{X}_n = \mu\right) = 1 \)
     </div>
 
-    <p>
-      As \( n \) increases, \( \bar{X}_n \) gets closer and closer to the true probability \( p = 0.5 \).
-      This principle is the foundation of statistical reliability and cyber risk analysis, 
-      where repeated observations reveal the true distribution of uncertain events.
-    </p>
-
-    <h2>Simulation: Coin Toss Experiment</h2>
-    <p>
-      Click below to simulate coin tosses and observe how the relative frequency of Heads 
-      converges toward the expected value of 0.5.
-    </p>
-    <div style="text-align:center;">
-      <button onclick="runSimulation()">Run Simulation</button>
+    <h3>Bernoulli Example</h3>
+    <div class="math-box">
+      \( X_i \in \{0,1\},\ E[X_i]=p,\ \overline{X}_n = \frac{1}{n}\sum X_i \xrightarrow{n\to\infty} p \)
     </div>
 
-    <div id="chartContainer">
-      <canvas id="llnChart"></canvas>
+    <h3>Chebyshev Inequality</h3>
+    <div class="math-box">
+      \( P(|\overline{X}_n - \mu| \ge \varepsilon) \le \frac{\sigma^2}{n\varepsilon^2} \)
     </div>
+  </section>
 
-    <h3>Formula for Relative Frequency</h3>
-    <div class="formula">
-      $$ f_n = \frac{k}{n} $$
+  <section class="card">
+    <h2>Simulation Controls</h2>
+    <div class="grid-2">
+      <div>
+        <label>Success probability p</label>
+        <input id="p" type="number" value="0.3" step="0.01" min="0" max="1">
+        <label>Number of trials n</label>
+        <input id="n" type="number" value="500">
+        <label>Runs (for histogram)</label>
+        <input id="runs" type="number" value="500">
+      </div>
+      <div>
+        <label>Sample trajectories</label>
+        <input id="sampleTraj" type="number" value="6">
+        <label>Seed (optional)</label>
+        <input id="seed" type="text" placeholder="leave empty for random">
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button id="runBtn">Run trajectories</button>
+          <button id="ensembleBtn" class="ghost">Run ensemble</button>
+          <button id="clearBtn" class="ghost">Clear</button>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <p>
-      where:
-      <ul>
-        <li>\( f_n \) = relative frequency of Heads after \( n \) trials</li>
-        <li>\( k \) = number of Heads observed</li>
-        <li>\( n \) = number of total trials</li>
-      </ul>
-      You can see below how the curve stabilizes near 0.5 as \( n \) grows larger.
-    </p>
+  <section class="card">
+    <h2>Visualizations</h2>
+    <div class="canvas-wrap"><canvas id="trajCanvas" class="canvas"></canvas></div>
+    <div class="canvas-wrap" style="margin-top:16px;"><canvas id="histCanvas" class="canvas"></canvas></div>
+  </section>
 
-    <footer>
-      © 2025 Javid Farzaliyev — Statistics Blog
-    </footer>
-  </main>
+  <div class="footer">&copy; 2025 Your Name — La Sapienza University</div>
 
-  <script src="/Statistics/homework4/script.js"></script>
+</div>
+
+<!-- External JS -->
+<script src="/Statistics/homework4/script.js"></script>
 </body>
 </html>
+
+
