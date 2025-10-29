@@ -1,54 +1,305 @@
-<section class="card" id="explanationDetailed">
-  <h2>Explanation & Background (detailed)</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Homework 3 — RSA & Reference Distribution</title>
 
-  <p><strong>RSA — overview and math.</strong> RSA is an asymmetric cryptosystem based on number theory. It uses a key pair: a <em>public key</em> for encryption and a <em>private key</em> for decryption. Keys are built from two (large) prime numbers <code>p</code> and <code>q</code>:</p>
-  <ol>
-    <li>Compute <code>n = p × q</code>. The modulus <code>n</code> is part of both the public and private keys.</li>
-    <li>Compute Euler's totient (for demonstration): <code>φ(n) = (p−1) × (q−1)</code>.</li>
-    <li>Choose a public exponent <code>e</code> such that <code>gcd(e, φ(n)) = 1</code> (common choices: 65537, 17, 3).</li>
-    <li>Compute the private exponent <code>d</code> as the modular inverse of <code>e</code> modulo <code>φ(n)</code>, i.e. <code>d ≡ e⁻¹ (mod φ(n))</code>.</li>
-    <li>Public key is <code>(e, n)</code>; private key is <code>(d, n)</code>.</li>
-  </ol>
+<!-- Inter font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <p><strong>Encryption / decryption (numerical):</strong> to encrypt an integer message <code>m</code> (0 ≤ m &lt; n) compute <code>c = m^e mod n</code>. To decrypt compute <code>m = c^d mod n</code>. In practice RSA operates on numeric blocks (combined bytes) and uses padding (e.g., OAEP) before exponentiation for security.</p>
+<style>
+:root{
+  --bg:#f5f6fa;
+  --card:#ffffff;
+  --text:#172031;
+  --muted:#475569;
+  --accent-a:#0ea5e9;
+  --accent-b:#f97316;
+  --radius:12px;
+  --shadow:0 10px 30px rgba(17,24,39,0.06);
+  --max-w:980px;
+}
 
-  <h3>From text to numbers</h3>
-  <p>Because RSA works on numbers, we convert characters to numeric blocks. In this demo we use a per-character encoding (each character → its Unicode/ASCII code). This makes the demo simple and educational but also makes it vulnerable: encrypting each character individually leaks patterns and frequencies that can be exploited.</p>
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.6;
+}
 
-  <h3>Security fundamentals — why real RSA is secure</h3>
-  <ul>
-    <li><strong>Factorization hardness:</strong> The security of RSA rests on the practical difficulty of factoring a large modulus <code>n</code> into <code>p</code> and <code>q</code>. With large (2048-bit) primes, factoring is infeasible with current technology.</li>
-    <li><strong>Padding:</strong> Proper padding (OAEP, PKCS#1) before encryption removes deterministic mapping between plaintexts and ciphertexts and defends against many attacks (textbook RSA = insecure).</li>
-    <li><strong>Block size:</strong> Real implementations encrypt blocks (large numeric messages) after padding; per-character encryption is insecure for demonstration purposes only.</li>
-  </ul>
+.container{
+  max-width:var(--max-w);
+  margin:28px auto;
+  padding:28px;
+}
 
-  <h3>Reference-distribution attack — concept and why it works here</h3>
-  <p><strong>Intuition:</strong> If encryption is done per character and the modulus is small, the same plaintext character will often map to the same ciphertext value (deterministic mapping). Frequencies of characters (for example, 'E' is common in English) can survive encryption as frequency patterns in ciphertext. A statistical attacker can exploit that by mapping frequent ciphertext values back to likely plaintext characters using a reference letter distribution.</p>
+/* header */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-bottom:18px;
+}
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.brand-mark{
+  width:46px;height:46px;border-radius:10px;
+  display:inline-grid;place-items:center;color:white;font-weight:700;
+  background:linear-gradient(135deg,var(--accent-a),var(--accent-b));
+  box-shadow:0 8px 20px rgba(14,165,233,0.08);
+  font-size:16px;
+}
+.brand-title .title{font-weight:700;color:var(--accent-b);font-size:1rem;}
+.brand-title .subtitle{font-size:0.85rem;color:var(--muted);}
 
-  <p><strong>Step-by-step attack used in this homework (per-block candidate selection):</strong></p>
-  <ol>
-    <li>Take the ciphertext block <code>c</code> (a number). For each printable candidate plaintext value <code>m</code> (e.g., ASCII 32–126), compute <code>m^e mod n</code> and check whether it equals <code>c</code>. If it equals, add <code>m</code> to the candidate list for that block.</li>
-    <li>If a block yields a single candidate, that candidate is the recovered character. If there are multiple candidates, use a language reference distribution (e.g., English letter frequencies) to pick the most plausible candidate (highest prior probability).</li>
-    <li>Repeat for every ciphertext block to reconstruct a plaintext string made of the best-guess characters.</li>
-  </ol>
+/* page title */
+.page-title{
+  text-align:left;
+  margin:6px 0 12px 0;
+}
+.page-title h1{margin:0;font-size:1.7rem;color:var(--accent-a);}
+.page-title p{margin:8px 0 0;color:var(--muted);font-size:1rem;}
 
-  <h3>Limitations and reliability</h3>
-  <p>This statistical approach works well for small modulus and per-character encryption, especially with short plaintext and English text. It is not a general RSA break for properly implemented RSA with padding and large modulus. The method is heuristic and may produce errors (unknown characters or incorrect guesses) when multiple candidates have similar probabilities.</p>
+/* cards */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px;
+  margin-bottom:18px;
+}
 
-  <h3>Mitigations (what correct systems do)</h3>
-  <ul>
-    <li>Use large keys (2048+ bits) so factoring is infeasible.</li>
-    <li>Use randomized padding (OAEP) before RSA so ciphertexts are non-deterministic and leak no direct frequency information.</li>
-    <li>Encrypt larger blocks (not single characters) and use authenticated encryption where appropriate.</li>
-  </ul>
+/* typography */
+h2{color:var(--accent-b);margin:0 0 10px 0;font-size:1.15rem;}
+h3{margin:12px 0 8px 0;color:var(--accent-a);font-size:1rem;}
+p,li{color:var(--muted);font-size:1rem;margin:8px 0;}
+small{color:var(--muted);}
 
-  <h3>What this demo shows</h3>
-  <p>By using small primes and per-character encryption we purposely create a weak setup so the reference distribution attack succeeds for demonstration. The goal is educational: show how naive uses of cryptography leak statistical structure that attackers exploit.</p>
-</section>
+/* tables and pre */
+table{width:100%;border-collapse:collapse;margin:12px 0;}
+table,th,td{border:1px solid #e6e9ee;}
+th,td{padding:8px;text-align:center;font-size:0.95rem;}
+th{background:var(--accent-a);color:#fff;font-weight:600;}
+pre{background:#f3f4f6;padding:10px;border-radius:8px;overflow:auto;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;font-size:0.95rem;}
 
-    <footer>
-      <div class="small">&copy; 2025 Javid Farzaliyev — La Sapienza University</div>
-    </footer>
+/* form controls */
+label{display:block;margin-top:8px;font-weight:600;color:var(--text);}
+input[type="text"], input[type="number"], textarea, select{
+  width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ee;font-size:1rem;
+  box-sizing:border-box;color:var(--text);
+}
+textarea{min-height:80px;resize:vertical;}
+.row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.row> *{flex:1 1 160px;}
+button{background:var(--accent-b);color:#fff;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600;}
+button.ghost{background:#fff;color:var(--accent-a);border:1px solid #e6e9ee;}
+
+/* code viewer */
+.code-toggle{display:flex;gap:10px;align-items:center;margin-top:12px;}
+.code-block{display:none;margin-top:12px;background:#fff;padding:12px;border-radius:10px;border:1px solid #eef2f6;}
+
+/* footer */
+.footer{margin-top:20px;padding-top:18px;border-top:1px solid #eef2f6;color:var(--muted);text-align:center;font-size:0.95rem;}
+
+@media(max-width:640px){
+  .brand-mark{width:40px;height:40px;font-size:14px;}
+  .page-title h1{font-size:1.4rem;}
+}
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- header -->
+    <div class="header">
+      <a class="brand" href="../index.html" aria-label="Home">
+        <div class="brand-mark">SB</div>
+        <div class="brand-title">
+          <div class="title">Statistics Blog</div>
+          <div class="subtitle">Student projects & homework</div>
+        </div>
+      </a>
+
+      <nav style="display:flex;gap:10px;align-items:center;">
+        <a href="../index.html" style="color:var(--muted);text-decoration:none;">Home</a>
+        <a href="../homework1/homework1.html" style="color:var(--muted);text-decoration:none;">HW1</a>
+        <a href="../homework2/homework2.html" style="color:var(--muted);text-decoration:none;">HW2</a>
+      </nav>
+    </div>
+
+    <!-- title -->
+    <div class="page-title">
+      <h1>Homework 3 — RSA & Reference Distribution</h1>
+      <p>This page demonstrates RSA per-character encryption and a reference-distribution attack that attempts to recover plaintext without the private key. The script is external (<code>script.js</code>) and visible below for inspection.</p>
+    </div>
+
+    <!-- detailed explanation (replaces previous short block) -->
+    <section class="card" id="explanationDetailed">
+      <h2>Explanation & Background (detailed)</h2>
+
+      <p><strong>RSA — overview and math.</strong> RSA is an asymmetric cryptosystem based on number theory. It uses a key pair: a <em>public key</em> for encryption and a <em>private key</em> for decryption. Keys are built from two (large) prime numbers <code>p</code> and <code>q</code>:</p>
+      <ol>
+        <li>Compute <code>n = p × q</code>. The modulus <code>n</code> is part of both the public and private keys.</li>
+        <li>Compute Euler's totient (for demonstration): <code>φ(n) = (p−1) × (q−1)</code>.</li>
+        <li>Choose a public exponent <code>e</code> such that <code>gcd(e, φ(n)) = 1</code> (common choices: 65537, 17, 3).</li>
+        <li>Compute the private exponent <code>d</code> as the modular inverse of <code>e</code> modulo <code>φ(n)</code>, i.e. <code>d ≡ e⁻¹ (mod φ(n))</code>.</li>
+        <li>Public key is <code>(e, n)</code>; private key is <code>(d, n)</code>.</li>
+      </ol>
+
+      <p><strong>Encryption / decryption (numerical):</strong> to encrypt an integer message <code>m</code> (0 ≤ m &lt; n) compute <code>c = m^e mod n</code>. To decrypt compute <code>m = c^d mod n</code>. In practice RSA operates on numeric blocks (combined bytes) and uses padding (e.g., OAEP) before exponentiation for security.</p>
+
+      <h3>From text to numbers</h3>
+      <p>Because RSA works on numbers, we convert characters to numeric blocks. In this demo we use a per-character encoding (each character → its Unicode/ASCII code). This makes the demo simple and educational but also makes it vulnerable: encrypting each character individually leaks patterns and frequencies that can be exploited.</p>
+
+      <h3>Security fundamentals — why real RSA is secure</h3>
+      <ul>
+        <li><strong>Factorization hardness:</strong> The security of RSA rests on the practical difficulty of factoring a large modulus <code>n</code> into <code>p</code> and <code>q</code>. With large (2048-bit) primes, factoring is infeasible with current technology.</li>
+        <li><strong>Padding:</strong> Proper padding (OAEP, PKCS#1) before encryption removes deterministic mapping between plaintexts and ciphertexts and defends against many attacks (textbook RSA = insecure).</li>
+        <li><strong>Block size:</strong> Real implementations encrypt larger blocks (not single characters) and often combine RSA with symmetric keys for performance.</li>
+      </ul>
+
+      <h3>Reference-distribution attack — concept and why it works here</h3>
+      <p><strong>Intuition:</strong> If encryption is done per character and the modulus is small, the same plaintext character will usually map to the same ciphertext value (deterministic mapping). Frequencies of characters (for example, 'E' is common in English) can survive encryption as frequency patterns in ciphertext. A statistical attacker can exploit that by mapping frequent ciphertext residues back to likely plaintext characters using a reference letter distribution.</p>
+
+      <p><strong>Attack steps used in this homework:</strong></p>
+      <ol>
+        <li>For each ciphertext block <code>c</code>, brute-force candidate plaintext values <code>m</code> in a printable ASCII range (32–126) and compute <code>m^e mod n</code>. If the result equals <code>c</code>, add <code>m</code> to the candidate list for that block.</li>
+        <li>If a single candidate remains, accept it. If multiple remain, choose the candidate with the highest prior probability according to an English reference distribution.</li>
+        <li>Combine best-candidate characters for all blocks to produce a decoded string.</li>
+      </ol>
+
+      <h3>Limitations and practical notes</h3>
+      <p>This statistical approach works in this demo because we intentionally use small primes and per-character encryption. With properly padded RSA and large keys, this attack is not practical. However the demo is useful to show how naive use of cryptography leaks statistical structure.</p>
+    </section>
+
+    <!-- RSA controls -->
+    <section class="card">
+      <h2>RSA setup & encryption</h2>
+
+      <label for="primeSize">Choose key size (demo)</label>
+      <select id="primeSize">
+        <option value="small">small primes (fast, insecure)</option>
+        <option value="medium">medium primes (slower)</option>
+      </select>
+
+      <div class="row" style="margin-top:12px;">
+        <button onclick="generateKeys()">Generate Keys</button>
+        <button class="ghost" onclick="showKeyInfo()">Show key info</button>
+      </div>
+
+      <p id="keyMeta" class="small" style="margin-top:10px;">Keys not generated yet.</p>
+
+      <label for="plainInput">Plaintext (short message)</label>
+      <input id="plainInput" type="text" value="HELLO RSA">
+
+      <div class="row">
+        <button onclick="encryptMessage()">Encrypt (public key)</button>
+        <button class="ghost" onclick="decryptWithPrivate()">Decrypt (using d)</button>
+      </div>
+
+      <label for="cipherOutput">Ciphertext (hex blocks)</label>
+      <textarea id="cipherOutput" readonly></textarea>
+
+      <label for="plainOutput">Decrypted (using private d)</label>
+      <textarea id="plainOutput" readonly></textarea>
+    </section>
+
+    <!-- Statistical decode -->
+    <section class="card">
+      <h2>Statistical / Reference-distribution decoding</h2>
+
+      <p>Try to recover plaintext <em>without</em> the private key using a reference letter distribution (English). This algorithm examines candidate plaintext bytes for each ciphertext block and picks the most probable letter when multiple candidates exist.</p>
+
+      <div class="row">
+        <button onclick="statisticalDecode()">Decode via reference distribution</button>
+        <button class="ghost" onclick="downloadJS()">Download script.js</button>
+      </div>
+
+      <label for="statDecode">Statistical decode result</label>
+      <textarea id="statDecode" readonly></textarea>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div>
+          <strong class="small">Plaintext frequency</strong>
+          <pre id="plainFreq">—</pre>
+        </div>
+        <div>
+          <strong class="small">Decoded frequency</strong>
+          <pre id="decodedFreq">—</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- JS source viewer (external file, visible) -->
+    <section class="card">
+      <h2>JavaScript source (script.js)</h2>
+
+      <div class="code-toggle">
+        <button onclick="toggleCode()">Show / Hide script.js</button>
+        <div class="small">The script file is loaded externally and the same content is displayed below so your professor can scroll through it.</div>
+      </div>
+
+      <div id="codeBlock" class="code-block" aria-hidden="true">
+        <pre id="sourceArea"><code>Loading script.js ...</code></pre>
+      </div>
+    </section>
+
+    <!-- footer -->
+    <div class="footer">
+      &copy; 2025 Javid Farzaliyev — La Sapienza University
+    </div>
   </div>
+
+<!-- load script.js (external) -->
+<script src="script.js"></script>
+
+<!-- helper to fetch and show script content; download helper also -->
+<script>
+  async function toggleCode(){
+    const block = document.getElementById('codeBlock');
+    const area = document.getElementById('sourceArea');
+    if(block.style.display === 'block'){ block.style.display='none'; block.setAttribute('aria-hidden','true'); return; }
+    if(area.textContent.trim() === 'Loading script.js ...'){
+      try{
+        const r = await fetch('script.js');
+        const txt = await r.text();
+        // escape for display (pre + code protects, but keep raw)
+        area.textContent = txt;
+      }catch(e){
+        area.textContent = 'Could not load script.js: ' + e;
+      }
+    }
+    block.style.display = 'block';
+    block.setAttribute('aria-hidden','false');
+    window.scrollTo({ top: block.offsetTop - 20, behavior: 'smooth' });
+  }
+
+  function downloadJS(){
+    fetch('script.js').then(r=>r.text()).then(text=>{
+      const blob = new Blob([text], {type:'text/javascript'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'script.js';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }).catch(e=>alert('Could not download: '+e));
+  }
+</script>
+
+</body>
+</html>
+
 
 
