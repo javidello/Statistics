@@ -1,1 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Homework 5 — Location & Dispersion Measures</title>
+
+<!-- Inter font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- MathJax for clean formulas -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+<style>
+:root{
+  --bg:#f5f6fa;
+  --card:#ffffff;
+  --text:#172031;
+  --muted:#475569;
+  --accent-a:#0ea5e9;
+  --accent-b:#f97316;
+  --radius:12px;
+  --shadow:0 10px 30px rgba(17,24,39,0.06);
+  --max-w:980px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.6;
+}
+
+.container{max-width:var(--max-w);margin:28px auto;padding:28px;}
+
+/* header */
+.header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.brand-mark{width:46px;height:46px;border-radius:10px;display:inline-grid;place-items:center;color:white;font-weight:700;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));box-shadow:0 8px 20px rgba(14,165,233,0.08);font-size:16px;}
+.brand-title .title{font-weight:700;color:var(--accent-b);font-size:1rem;}
+.brand-title .subtitle{font-size:0.85rem;color:var(--muted);}
+
+/* page title */
+.page-title{margin:6px 0 12px 0;}
+.page-title h1{margin:0;font-size:1.7rem;color:var(--accent-a);}
+.page-title p{margin:8px 0 0;color:var(--muted);font-size:1rem;}
+
+/* cards */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;}
+
+h2{color:var(--accent-b);margin:0 0 10px 0;font-size:1.15rem;}
+h3{margin:12px 0 8px 0;color:var(--accent-a);font-size:1rem;}
+p,li{color:var(--muted);font-size:1rem;margin:8px 0;}
+small{color:var(--muted);}
+
+/* math box style */
+.math-box{background:#f3f6fb;border-radius:10px;padding:12px;margin:12px 0;border:1px solid #e9f0fb;text-align:center;font-size:1.02rem;}
+
+/* definitions list */
+.dlist{display:grid;grid-template-columns:1fr;gap:10px;}
+.term{font-weight:700;color:var(--text);margin-bottom:6px;}
+.explain{color:var(--muted);margin:0 0 8px 0;}
+
+/* table */
+.table{width:100%;border-collapse:collapse;margin-top:8px;}
+.table th, .table td{border:1px solid #e6e9ee;padding:8px;text-align:left;font-size:0.95rem;}
+.table th{background:var(--accent-a);color:white;font-weight:600;}
+
+/* code / example */
+pre{background:#f3f4f6;padding:10px;border-radius:8px;overflow:auto;font-family:var(--mono);font-size:0.95rem;}
+
+/* footer */
+.footer{margin-top:20px;padding-top:18px;border-top:1px solid #eef2f6;color:var(--muted);text-align:center;font-size:0.95rem;}
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- header -->
+    <div class="header">
+      <a class="brand" href="../index.html" aria-label="Home">
+        <div class="brand-mark">SB</div>
+        <div class="brand-title">
+          <div class="title">Statistics</div>
+        </div>
+      </a>
+
+      <nav style="display:flex;gap:10px;align-items:center;">
+        <a href="../index.html" style="color:var(--muted);text-decoration:none;">Home</a>
+        <a href="../homework1/homework1.html" style="color:var(--muted);text-decoration:none;">HW1</a>
+        <a href="../homework2/homework2.html" style="color:var(--muted);text-decoration:none;">HW2</a>
+        <a href="../homework3/homework3.html" style="color:var(--muted);text-decoration:none;">HW3</a>
+        <a href="../homework4/homework4.html" style="color:var(--muted);text-decoration:none;">HW4</a>
+      </nav>
+    </div>
+
+    <!-- title -->
+    <div class="page-title">
+      <h1>Homework 5 — Measures of Location & Dispersion</h1>
+      <p>Definitions, formulas, interpretations, examples and guidance on which measure to use and why.</p>
+    </div>
+
+    <!-- overview -->
+    <section class="card">
+      <h2>Overview</h2>
+      <p>This assignment surveys common <strong>measures of location</strong> (central tendency) and <strong>measures of dispersion</strong> (spread). For each we provide: a clear definition, the mathematical formula, an intuitive explanation, a short example, and when it's appropriate to use it (strengths / weaknesses).</p>
+      <p>All formulas are rendered with MathJax. Read the short examples to show you understand the difference between robust measures and those sensitive to outliers.</p>
+    </section>
+
+    <!-- LOCATION -->
+    <section class="card">
+      <h2>Measures of Location (Central Tendency)</h2>
+
+      <div class="dlist">
+        <div>
+          <div class="term">Arithmetic Mean (Average)</div>
+          <div class="explain">Definition: the sum of values divided by the count. Formula:</div>
+          <div class="math-box">\( \bar{x} = \dfrac{1}{n}\sum_{i=1}^n x_i \)</div>
+          <p class="explain">Intuition: balances values; sensitive to extreme values (outliers). Commonly used when data are symmetric or normally distributed.</p>
+          <p class="explain"><strong>Example:</strong> For data {2, 3, 7}, \( \bar{x} = (2+3+7)/3 = 4 \).</p>
+        </div>
+
+        <div>
+          <div class="term">Median</div>
+          <div class="explain">Definition: the middle value when data are sorted (or the average of two middle values for even n).</div>
+          <div class="math-box">\( \tilde{x} = \begin{cases} x_{(k)} & n = 2k-1 \\ \dfrac{x_{(k)} + x_{(k+1)}}{2} & n=2k \end{cases} \)</div>
+          <p class="explain">Intuition: robust to outliers; preferred when distribution is skewed. Example: {2,3,100} → median = 3 (mean = 35).</p>
+        </div>
+
+        <div>
+          <div class="term">Mode</div>
+          <div class="explain">Definition: the most frequent value(s) in the dataset.</div>
+          <div class="math-box">mode = value with highest frequency</div>
+          <p class="explain">Intuition: useful for categorical data or multimodal distributions. Example: {1,1,2,3} → mode = 1.</p>
+        </div>
+
+        <div>
+          <div class="term">Geometric Mean</div>
+          <div class="explain">Definition: the nth root of the product of values (for positive data). Formula:</div>
+          <div class="math-box">\( G = \left(\prod_{i=1}^n x_i\right)^{1/n} \)</div>
+          <p class="explain">Used for growth rates, ratios, and multiplicative processes. Not defined for non-positive values without transformation.</p>
+        </div>
+
+        <div>
+          <div class="term">Harmonic Mean</div>
+          <div class="explain">Definition: reciprocal of the arithmetic mean of reciprocals. Formula:</div>
+          <div class="math-box">\( H = \dfrac{n}{\sum_{i=1}^n \dfrac{1}{x_i}} \)</div>
+          <p class="explain">Useful for rates (e.g., average speeds) where averaging reciprocals is appropriate. Sensitive to zeros.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISPERSION -->
+    <section class="card">
+      <h2>Measures of Dispersion (Spread)</h2>
+
+      <div class="dlist">
+        <div>
+          <div class="term">Range</div>
+          <div class="explain">Definition: difference between maximum and minimum.</div>
+          <div class="math-box">\( \text{Range} = x_{(n)} - x_{(1)} \)</div>
+          <p class="explain">Simple but sensitive to outliers; gives crude idea of spread.</p>
+        </div>
+
+        <div>
+          <div class="term">Interquartile Range (IQR)</div>
+          <div class="explain">Definition: difference between 75th and 25th percentiles (Q3 − Q1).</div>
+          <div class="math-box">\( \mathrm{IQR} = Q_{3} - Q_{1} \)</div>
+          <p class="explain">Robust measure of spread; ignores extreme tails. Useful for skewed data and boxplots.</p>
+        </div>
+
+        <div>
+          <div class="term">Variance (Population & Sample)</div>
+          <div class="explain">Definition: average squared deviation from the mean. Population variance uses n, sample variance uses n−1 to be unbiased.</div>
+          <div class="math-box">
+            Population: \( \sigma^2 = \dfrac{1}{n}\sum_{i=1}^n (x_i - \mu)^2 \)  
+            <br>
+            Sample: \( s^2 = \dfrac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})^2 \)
+          </div>
+          <p class="explain">Interpretation: measures spread in squared units; commonly used in theory and inference. Sensitive to outliers.</p>
+        </div>
+
+        <div>
+          <div class="term">Standard Deviation</div>
+          <div class="explain">Definition: square root of variance; same units as original data.</div>
+          <div class="math-box">Population: \( \sigma = \sqrt{\sigma^2} \), Sample: \( s = \sqrt{s^2} \)</div>
+          <p class="explain">Useful for reporting spread, and in many statistical formulas (e.g., z-scores). Still sensitive to outliers.</p>
+        </div>
+
+        <div>
+          <div class="term">Mean Squared Error (MSE)</div>
+          <div class="explain">Definition: average squared difference between estimator and true value (or between predictions and observations).</div>
+          <div class="math-box">\( \mathrm{MSE}(\hat{\theta}) = E[(\hat{\theta} - \theta)^2] \)</div>
+          <p class="explain">Used to evaluate estimators and predictions; decomposes into variance + bias^2 (bias–variance trade-off).</p>
+        </div>
+
+        <div>
+          <div class="term">Median Absolute Deviation (MAD)</div>
+          <div class="explain">Definition: median of absolute deviations from the median; robust alternative to standard deviation.</div>
+          <div class="math-box">\( \mathrm{MAD} = \mathrm{median}(|x_i - \mathrm{median}(x)|) \)</div>
+          <p class="explain">Very robust to outliers; often scaled (×1.4826) to estimate standard deviation under normality.</p>
+        </div>
+
+        <div>
+          <div class="term">Coefficient of Variation (CV)</div>
+          <div class="explain">Definition: ratio of standard deviation to mean (dimensionless).</div>
+          <div class="math-box">\( \mathrm{CV} = \dfrac{s}{\bar{x}} \)</div>
+          <p class="explain">Useful to compare variability across different scales / units. Only meaningful for ratio-scale data (mean ≠ 0).</p>
+        </div>
+
+        <div>
+          <div class="term">Percentiles / Quantiles</div>
+          <div class="explain">Definition: the p-th percentile is the value below which p% of observations fall. Notation: \(Q_p\).</div>
+          <div class="math-box">Example: median = \(Q_{50}\), first quartile = \(Q_{25}\).</div>
+          <p class="explain">Useful to describe distribution shape and tails; robust to outliers.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARISON & WHEN TO USE -->
+    <section class="card">
+      <h2>Comparison & Practical Guidance</h2>
+      <table class="table" aria-describedby="comparison">
+        <thead>
+          <tr><th>Measure</th><th>Robust to outliers?</th><th>Use when...</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Mean</td><td>No</td><td>Data symmetric, no extreme outliers; theoretical work (normal-based inference)</td></tr>
+          <tr><td>Median</td><td>Yes</td><td>Skewed data, heavy tails, or outliers; descriptive summaries</td></tr>
+          <tr><td>Mode</td><td>Depends</td><td>Categorical data or multimodal distributions</td></tr>
+          <tr><td>Variance / SD</td><td>No</td><td>When using squared-error loss or variance-based inference</td></tr>
+          <tr><td>IQR / MAD</td><td>Yes</td><td>Robust description of spread, boxplots, outlier detection</td></tr>
+          <tr><td>MSE</td><td>—</td><td>Compare estimators or prediction errors (trade-off variance vs bias)</td></tr>
+          <tr><td>CV</td><td>No (scale-free)</td><td>Compare variability across different units or magnitudes</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Short examples</h3>
+      <p><strong>Outlier example:</strong> Data: {2, 3, 4, 5, 100} → mean=22.8 (misleading), median=4 (better center). IQR and MAD remain small: robust summary recommended.</p>
+
+      <p><strong>Use in cybersecurity:</strong> Mean and SD of login attempt times might be useful when data are roughly symmetric; but for heavy-tailed attack counts or skewed response times, median and IQR give a more reliable picture. MSE is used to evaluate prediction models (e.g., forecasting attack volume).</p>
+    </section>
+
+    <!-- FORMULAS SUMMARY -->
+    <section class="card">
+      <h2>Compact Formula Summary</h2>
+      <div class="math-box">
+        Mean: \( \bar{x} = \dfrac{1}{n}\sum_{i=1}^n x_i \)  
+        &nbsp; | &nbsp; Variance (sample): \( s^2 = \dfrac{1}{n-1}\sum (x_i - \bar{x})^2 \)  
+        &nbsp; | &nbsp; SD: \( s = \sqrt{s^2} \)
+      </div>
+
+      <div class="math-box">
+        MSE: \( \mathrm{MSE}(\hat{\theta}) = E[(\hat{\theta}-\theta)^2] = \mathrm{Var}(\hat{\theta}) + \mathrm{Bias}(\hat{\theta})^2 \)
+      </div>
+
+      <div class="math-box">
+        IQR: \( Q_3 - Q_1 \) &nbsp; | &nbsp; MAD: \( \mathrm{median}(|x_i - \mathrm{median}(x)|) \)
+      </div>
+    </section>
+
+    <!-- PRACTICAL TIP -->
+    <section class="card">
+      <h2>Practical Recommendations</h2>
+      <ol>
+        <li>Always visualize the data first (histogram, boxplot). Visuals inform whether mean/SD or median/IQR is appropriate.</li>
+        <li>For skewed data or heavy tails: prefer median + IQR or MAD.</li>
+        <li>For performance evaluation: use MSE or related metrics (RMSE, MAE) and report variance + bias trade-offs.</li>
+        <li>When comparing across scales, prefer dimensionless measures (CV) or standardized metrics (z-scores).</li>
+        <li>Document which version of variance you use (population vs sample) and why (unbiasedness vs interpretability).</li>
+      </ol>
+    </section>
+
+    <div class="footer">&copy; 2025 Javid Farzaliyev — La Sapienza University</div>
+  </div>
+</body>
+</html>
 
