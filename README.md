@@ -16,8 +16,8 @@ Statistics is the science of collecting, analyzing, and interpreting data. In th
   - `homework2/homework2.html` — Dataset, Distribution & Caesar Cipher
   - `homework3/homework3.html` - RSA & Reference Distribution
   - `homework4/homework4.html` - Law of Large Numbers
-
-
+  - `homework5/homework5.html` - Location & Dispersion Measures
+  - `homework6/homework6.html` - Incremental Mean & Variance
 
 ## Access
 
