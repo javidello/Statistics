@@ -1,1 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Homework 6 — Incremental (Online) Mean & Variance</title>
+
+<!-- Inter font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- MathJax for formulas -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+<style>
+:root{
+  --bg:#f5f6fa;
+  --card:#ffffff;
+  --text:#172031;
+  --muted:#475569;
+  --accent-a:#0ea5e9;
+  --accent-b:#f97316;
+  --radius:12px;
+  --shadow:0 10px 30px rgba(17,24,39,0.06);
+  --max-w:980px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.6;
+}
+
+.container{max-width:var(--max-w);margin:28px auto;padding:28px;}
+.header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.brand-mark{width:46px;height:46px;border-radius:10px;display:inline-grid;place-items:center;color:white;font-weight:700;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));box-shadow:0 8px 20px rgba(14,165,233,0.08);font-size:16px;}
+.brand-title .title{font-weight:700;color:var(--accent-b);font-size:1rem;}
+.brand-title .subtitle{font-size:0.85rem;color:var(--muted);}
+
+/* page title */
+.page-title{margin:6px 0 12px 0;}
+.page-title h1{margin:0;font-size:1.7rem;color:var(--accent-a);}
+.page-title p{margin:8px 0 0;color:var(--muted);font-size:1rem;}
+
+/* cards */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;}
+h2{color:var(--accent-b);margin:0 0 10px 0;font-size:1.15rem;}
+h3{margin:12px 0 8px 0;color:var(--accent-a);font-size:1rem;}
+p,li{color:var(--muted);font-size:1rem;margin:8px 0;}
+.math-box{background:#f3f6fb;border-radius:10px;padding:12px;margin:12px 0;border:1px solid #e9f0fb;text-align:center;font-size:1.02rem;}
+pre{background:#f3f4f6;padding:10px;border-radius:8px;overflow:auto;font-family:var(--mono);font-size:0.95rem;}
+label{display:block;margin-top:8px;font-weight:600;color:var(--text);}
+input[type="text"],input[type="number"],textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ee;font-size:1rem;box-sizing:border-box;color:var(--text);}
+.row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.row> *{flex:1 1 160px;}
+button{background:var(--accent-b);color:#fff;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600;}
+button.ghost{background:#fff;color:var(--accent-a);border:1px solid #e6e9ee;}
+.small{font-size:0.95rem;color:var(--muted);}
+
+/* code viewer */
+.code-toggle{display:flex;gap:10px;align-items:center;margin-top:12px;}
+.code-block{display:none;margin-top:12px;background:#fff;padding:12px;border-radius:10px;border:1px solid #eef2f6;white-space:pre-wrap;}
+
+/* results */
+.results{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+.result-box{background:#fafbff;padding:12px;border-radius:10px;border:1px solid #eef2f6;}
+.result-box strong{display:block;color:var(--text);margin-bottom:6px;}
+.footer{margin-top:20px;padding-top:18px;border-top:1px solid #eef2f6;color:var(--muted);text-align:center;font-size:0.95rem;}
+@media(max-width:760px){.results{grid-template-columns:1fr;}}
+
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <a class="brand" href="../index.html">
+        <div class="brand-mark">SB</div>
+        <div class="brand-title">
+          <div class="title">Statistics Blog</div>
+          <div class="subtitle">Student projects & homework</div>
+        </div>
+      </a>
+
+      <nav style="display:flex;gap:10px;align-items:center;">
+        <a href="../index.html" style="color:var(--muted);text-decoration:none;">Home</a>
+        <a href="../homework1/homework1.html" style="color:var(--muted);text-decoration:none;">HW1</a>
+        <a href="../homework2/homework2.html" style="color:var(--muted);text-decoration:none;">HW2</a>
+        <a href="../homework3/homework3.html" style="color:var(--muted);text-decoration:none;">HW3</a>
+        <a href="../homework4/homework4.html" style="color:var(--muted);text-decoration:none;">HW4</a>
+        <a href="../homework5/homework5.html" style="color:var(--muted);text-decoration:none;">HW5</a>
+      </nav>
+    </div>
+
+    <div class="page-title">
+      <h1>Homework 6 — Incremental (Online) Mean & Variance</h1>
+      <p>Analytical derivations and tested online algorithms that update mean & variance incrementally (stable & efficient).</p>
+    </div>
+
+    <!-- Analytical derivation -->
+    <section class="card">
+      <h2>Analytical Task — Derivations (step by step)</h2>
+
+      <h3>Recurrence for the arithmetic mean</h3>
+      <p>Let \(x_1,\dots,x_n\) be observed values and define the sample mean</p>
+      <div class="math-box">
+        \( \bar{x}_n = \dfrac{1}{n}\sum_{i=1}^n x_i. \)
+      </div>
+      <p>Write \(\bar{x}_n\) in terms of \(\bar{x}_{n-1}\) and the new value \(x_n\):</p>
+      <div class="math-box">
+        \[
+          \bar{x}_n = \frac{1}{n}\left(\sum_{i=1}^{n-1} x_i + x_n\right)
+          = \frac{n-1}{n}\bar{x}_{n-1} + \frac{1}{n}x_n
+          = \bar{x}_{n-1} + \frac{x_n - \bar{x}_{n-1}}{n}.
+        \]
+      </div>
+      <p><strong>Interpretation:</strong> the new mean is the old mean plus a correction proportional to the error \(x_n - \bar{x}_{n-1}\) scaled by 1/n. This is the simplest online update for the mean and is exact (no approximation).</p>
+
+      <h3>Recurrence for variance — Welford's method (stable)</h3>
+      <p>A naive recurrence for variance is numerically unstable (catastrophic cancellation). Welford’s algorithm maintains running <em>count</em> \(n\), running mean \(\bar{x}_n\), and running sum of squares of differences \(M_{2,n}\) (the second moment accumulator). Then:</p>
+
+      <div class="math-box">
+        \(
+          \begin{aligned}
+            n &\leftarrow n + 1,\\
+            \delta &= x - \bar{x}_{\text{old}},\\
+            \bar{x}_{\text{new}} &= \bar{x}_{\text{old}} + \delta / n,\\
+            M_{2,\text{new}} &= M_{2,\text{old}} + \delta \cdot (x - \bar{x}_{\text{new}}).
+          \end{aligned}
+        \)
+      </div>
+
+      <p>Why this works — short derivation:</p>
+      <ol>
+        <li>Start from definitions: variance (population) \( \sigma_n^2 = \dfrac{1}{n}\sum_{i=1}^n (x_i - \mu_n)^2 \). We instead maintain \(M_2(n)=\sum_{i=1}^n (x_i - \bar{x}_n)^2\).</li>
+        <li>When the new value x arrives, write \(M_2^{(n)} = M_2^{(n-1)} + (x - \bar{x}_n)(x - \bar{x}_{n-1})\). After algebraic rearrangement that uses \(\delta = x - \bar{x}_{n-1}\) and \(\bar{x}_n = \bar{x}_{n-1} + \delta/n\), you obtain the update above.</li>
+      </ol>
+
+      <p>Finally, sample variance (unbiased) is</p>
+      <div class="math-box">
+        \( s^2 = \dfrac{M_2}{n-1} \quad (n>1). \)
+      </div>
+
+      <p><strong>Note:</strong> using \(M_2/n\) gives the population variance; dividing by \(n-1\) gives the unbiased sample variance.</p>
+    </section>
+
+    <!-- Numerical stability -->
+    <section class="card">
+      <h2>Numerical stability & complexity</h2>
+      <p><strong>Why Welford?</strong> The naive "update variance" formula that uses sums of squares and subtracting large similar numbers suffers from catastrophic cancellation and loss of precision. Welford avoids subtracting large nearly-equal numbers and uses differences (δ) which remain small and accurate.</p>
+      <p><strong>Complexity:</strong> Each update is O(1) time and O(1) memory (only three scalars stored: n, mean, M2). Batch algorithms require O(n) memory to store data or multiple passes and are less suited for streaming data.</p>
+    </section>
+
+    <!-- Implementation UI -->
+    <section class="card">
+      <h2>Online algorithm — interactive demo</h2>
+
+      <p class="small">Type numbers (comma or newline separated) or press the buttons to append values. The page shows online mean & sample variance updated incrementally (Welford), and also shows the batch mean/variance for comparison (computed from the whole list) so you can verify exactness.</p>
+
+      <label for="dataInput">Data (add / paste values)</label>
+      <textarea id="dataInput" placeholder="e.g. 2, 3.5, 7, 4"></textarea>
+
+      <div class="row" style="margin-top:10px;">
+        <button id="loadBtn">Load values (replace)</button>
+        <button id="appendBtn" class="ghost">Append values</button>
+        <button id="randomBtn" class="ghost">Add random value</button>
+        <button id="clearBtn" class="ghost">Clear all</button>
+      </div>
+
+      <div class="results">
+        <div class="result-box">
+          <strong>Online (Welford) state</strong>
+          <div id="onlineCount">n: 0</div>
+          <div id="onlineMean">mean: —</div>
+          <div id="onlineM2">M2: —</div>
+          <div id="onlineVar">sample var (s²): —</div>
+        </div>
+
+        <div class="result-box">
+          <strong>Batch (full data) result</strong>
+          <div id="batchCount">n: 0</div>
+          <div id="batchMean">mean: —</div>
+          <div id="batchVar">sample var (s²): —</div>
+          <div id="dataPreview" style="margin-top:8px;color:var(--muted);font-size:0.95rem;">(no data)</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <button id="showCodeBtn" class="ghost">Show / Hide JS source</button>
+      </div>
+
+      <div id="codeBlock" class="code-block" aria-hidden="true">
+        <pre id="sourceArea"><code>Loading script...</code></pre>
+      </div>
+    </section>
+
+    <div class="footer">&copy; 2025 Javid Farzaliyev — La Sapienza University</div>
+  </div>
+
+<!-- load external script (relative path) -->
+<script src="script.js"></script>
+</body>
+</html>
 
