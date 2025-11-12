@@ -1,1 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Homework 8 — Analogies, Binomial Coefficients & Combinatorics</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+<style>
+:root{
+  --bg:#f5f6fa; --card:#ffffff; --text:#172031; --muted:#475569;
+  --accent-a:#0ea5e9; --accent-b:#f97316; --radius:12px; --shadow:0 10px 30px rgba(17,24,39,0.06);
+  --max-w:980px;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:"Inter",system-ui,Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+.container{max-width:var(--max-w);margin:28px auto;padding:28px;}
+.header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.brand-mark{width:46px;height:46px;border-radius:10px;display:inline-grid;place-items:center;color:white;font-weight:700;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));box-shadow:0 8px 20px rgba(14,165,233,0.08);font-size:16px;}
+.page-title h1{margin:0;font-size:1.7rem;color:var(--accent-a);}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;}
+h2{color:var(--accent-b);} h3{color:var(--accent-a);} p,li{color:var(--muted);}
+.math-box{background:#f3f6fb;border-radius:10px;padding:12px;margin:12px 0;border:1px solid #e9f0fb;text-align:center;}
+.footer{margin-top:20px;padding-top:18px;border-top:1px solid #eef2f6;color:var(--muted);text-align:center;font-size:0.95rem;}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a class="brand" href="../index.html">
+        <div class="brand-mark">SB</div>
+        <div class="brand-title"><div class="title">Statistics</div></div>
+      </a>
+      <nav style="display:flex;gap:10px;align-items:center;">
+        <a href="../index.html" style="color:var(--muted);text-decoration:none;">Home</a>
+        <a href="../homework7/homework7.html" style="color:var(--muted);text-decoration:none;">HW7</a>
+      </nav>
+    </div>
+
+    <div class="page-title">
+      <h1>Homework 8 — Analogies & combinatorics (Binomial, Pascal, Fibonacci)</h1>
+      <p>Discussion of relationships between the server/attacker model (HW7), Bernoulli LLN (HW4), binomial coefficients, Pascal's triangle and related combinatorial identities.</p>
+    </div>
+
+    <section class="card">
+      <h2>High-level analogy</h2>
+      <p>Both Homework 4 (Bernoulli trials & LLN) and Homework 7 (weekly server security) are instances of repeated independent Bernoulli trials with a fixed success probability per trial: in HW4 a single Bernoulli(p) per trial, in HW7 a weekly Bernoulli(q) where \(q=1-(1-p)^m\). In both cases:</p>
+      <ul>
+        <li>Counts of successes over \(n\) trials follow a Binomial(n, p') distribution (p'=p in HW4, p'=q in HW7).</li>
+        <li>Sample means (relative frequencies) converge to the true success probability by the LLN.</li>
+        <li>Empirical histograms of counts converge to the Binomial pmf as the number of simulated trajectories grows.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Binomial coefficients & Pascal's triangle</h2>
+      <p>The binomial coefficient counts the number of ways to choose \(k\) successes among \(n\) trials:</p>
+      <div class="math-box">
+        \( {n \choose k} = \dfrac{n!}{k!(n-k)!} \)
+      </div>
+      <p>Binomial pmf:</p>
+      <div class="math-box">
+        \( P(K=k) = {n \choose k} p'^k (1-p')^{n-k}. \)
+      </div>
+      <p>Pascal's triangle arranges binomial coefficients. Each entry equals sum of the two above it, reflecting the recurrence:</p>
+      <div class="math-box">
+        \( {n \choose k} = {n-1 \choose k-1} + {n-1 \choose k}. \)
+      </div>
+      <p>This combinatorial recurrence corresponds to the two possible outcomes of the last trial (success or failure), which is the same reasoning behind binomial probabilities.</p>
+    </section>
+
+    <section class="card">
+      <h2>Binomial expansion</h2>
+      <p>The binomial theorem links coefficients to powers:</p>
+      <div class="math-box">
+        \( (x + y)^n = \sum_{k=0}^n {n \choose k} x^{k} y^{n-k}. \)
+      </div>
+      <p>Setting \(x=p'\), \(y=1-p'\) recovers that the binomial pmf sums to 1 (normalization): \(\sum_k {n\choose k} p'^k (1-p')^{n-k} = 1\).</p>
+    </section>
+
+    <section class="card">
+      <h2>Connections to Fibonacci & combinatorial identities</h2>
+      <p>While Fibonacci numbers have a different combinatorial origin, there are interesting cross-links:</p>
+      <ul>
+        <li>A path-counting interpretation: certain restricted lattice paths counted by binomial-like coefficients produce Fibonacci numbers (e.g. compositions using steps 1 and 2).</li>
+        <li>Binomial sums generate identities that sometimes simplify to Fibonacci-like sequences. Example identity:</li>
+      </ul>
+      <div class="math-box">
+        \( F_{n} = \sum_{k=0}^{\lfloor (n-1)/2 \rfloor} {n-1-k \choose k} \)
+      </div>
+      <p>This counts ways to write n as sums of 1s and 2s — combinatorics bridging binomial coefficients and Fibonacci.</p>
+    </section>
+
+    <section class="card">
+      <h2>Mathematical properties & limit relations</h2>
+      <p>Several important limits/approximations relate the binomial to other distributions:</p>
+      <ul>
+        <li><strong>Normal approximation:</strong> Binomial(n,p) ≈ Normal(np, np(1-p)) for large n (De Moivre–Laplace / CLT).</li>
+        <li><strong>Poisson approximation:</strong> For n large and p small with λ = np fixed, Binomial(n,p) ≈ Poisson(λ).</li>
+        <li>These approximations explain how histogram shapes evolve as n and p change.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Practical interpretation & conclusions</h2>
+      <p>In both HW4 and HW7 the same statistical machinery applies: counting independent trials → binomial pmf → relative frequencies → convergence by LLN. The HW7 mapping to ±1 random walk is a convenient visual: final S encodes the difference of successes and failures and translates directly to binomial counts.</p>
+
+      <p>Key takeaway for a report: show (1) the theoretical binomial pmf, (2) the empirical histogram from simulation, and (3) asymptotic approximations (normal) to discuss convergence. Mention combinatorial reasoning (binomial coefficients / Pascal) when explaining why probabilities are the way they are.</p>
+    </section>
+
+    <div class="footer">&copy; 2025 Javid Farzaliyev — La Sapienza University</div>
+  </div>
+</body>
+</html>
 
