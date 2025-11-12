@@ -1,1 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Homework 7 — Server security, random-walk & binomial convergence</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+<style>
+:root{
+  --bg:#f5f6fa; --card:#ffffff; --text:#172031; --muted:#475569;
+  --accent-a:#0ea5e9; --accent-b:#f97316; --radius:12px;
+  --shadow:0 10px 30px rgba(17,24,39,0.06); --max-w:980px;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:"Inter",system-ui,Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+.container{max-width:var(--max-w);margin:28px auto;padding:28px;}
+.header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.brand-mark{width:46px;height:46px;border-radius:10px;display:inline-grid;place-items:center;color:white;font-weight:700;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));box-shadow:0 8px 20px rgba(14,165,233,0.08);font-size:16px;}
+.brand-title .title{font-weight:700;color:var(--accent-b);font-size:1rem;}
+.brand-title .subtitle{font-size:0.85rem;color:var(--muted);}
+.page-title h1{margin:0;font-size:1.7rem;color:var(--accent-a);}
+.page-title p{margin:6px 0 0;color:var(--muted);}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;}
+h2{color:var(--accent-b);} h3{color:var(--accent-a);} p,li{color:var(--muted);}
+.math-box{background:#f3f6fb;border-radius:10px;padding:12px;margin:12px 0;border:1px solid #e9f0fb;text-align:center;}
+input,button{font-family:inherit;}
+button{background:var(--accent-b);color:#fff;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600;}
+button.ghost{background:#fff;color:var(--accent-a);border:1px solid #e6e9ee;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:760px){.grid-2{grid-template-columns:1fr;}}
+.canvas-wrap{background:#fff;padding:12px;border-radius:10px;border:1px solid #eef2f6;}
+.canvas{width:100%;height:320px;display:block;}
+.table{width:100%;border-collapse:collapse;margin-top:12px;}
+.table th,.table td{border:1px solid #e6e9ee;padding:8px;text-align:left;}
+.table th{background:var(--accent-a);color:#fff;}
+.footer{margin-top:20px;padding-top:18px;border-top:1px solid #eef2f6;color:var(--muted);text-align:center;font-size:0.95rem;}
+.code-block{display:none;margin-top:12px;background:#fff;padding:12px;border-radius:10px;border:1px solid #eef2f6;white-space:pre-wrap;font-family:ui-monospace, monospace;}
+.small{font-size:0.95rem;color:var(--muted);}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a class="brand" href="../index.html">
+        <div class="brand-mark">SB</div>
+        <div class="brand-title"><div class="title">Statistics</div></div>
+      </a>
+      <nav style="display:flex;gap:10px;align-items:center;">
+        <a href="../index.html" style="color:var(--muted);text-decoration:none;">Home</a>
+        <a href="../homework6/homework6.html" style="color:var(--muted);text-decoration:none;">HW6</a>
+      </nav>
+    </div>
+
+    <div class="page-title">
+      <h1>Homework 7 — Servers, attackers, random walks & binomial convergence</h1>
+      <p>Simulate weekly server security (+1 secure, −1 breached), view trajectories as random walks, and show empirical counts converge to binomial distribution.</p>
+    </div>
+
+    <section class="card">
+      <h2>Problem setup & model</h2>
+      <p>We assume:</p>
+      <ul>
+        <li>Server receives security updates weekly for <strong>n</strong> weeks.</li>
+        <li>Each week has <strong>m</strong> independent attackers.</li>
+        <li>Each attacker independently succeeds with probability <strong>p</strong>.</li>
+      </ul>
+
+      <p>Probability that at least one attacker succeeds in a week (the server is breached that week):</p>
+      <div class="math-box">
+        \( q = 1 - (1-p)^m. \)
+      </div>
+
+      <p>Assign step \(+1\) if server remains secure (no attacker succeeded that week), and \(-1\) if breached. Over \(n\) weeks, the total score \(S\) is:</p>
+      <div class="math-box">
+        \( S = \sum_{i=1}^n X_i \quad\text{with } X_i\in\{+1,-1\}. \)
+      </div>
+      <p>If \(K\) is the number of breached weeks (Binomial(n,q)):</p>
+      <div class="math-box">
+        \( S = (n-K) - K = n - 2K. \)
+      </div>
+      <p>Therefore the pmf of \(S\) is directly determined by the binomial pmf of \(K\):</p>
+      <div class="math-box">
+        \( P(S = s) = P\left(K = \frac{n-s}{2}\right) = {n \choose k} q^k (1-q)^{n-k}, \quad\text{where } k=\frac{n-s}{2}. \)
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Interactive simulation</h2>
+      <p class="small">Set parameters, simulate many independent trajectories, see sample trajectories, histogram of final scores and theoretical binomial probabilities for comparison.</p>
+
+      <div class="grid-2">
+        <div>
+          <label>weeks (n)</label>
+          <input id="n" type="number" value="20" min="1" max="1000">
+          <label>attackers per week (m)</label>
+          <input id="m" type="number" value="3" min="1" max="100">
+          <label>attacker success prob (p)</label>
+          <input id="p" type="number" value="0.1" step="0.01" min="0" max="1">
+        </div>
+        <div>
+          <label>number of trajectories (trials)</label>
+          <input id="trials" type="number" value="5000" min="1" max="200000">
+          <label>show sample trajectories</label>
+          <input id="showTraj" type="number" value="6" min="1" max="50">
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+            <button id="runSim">Run simulation</button>
+            <button id="clearSim" class="ghost">Clear</button>
+            <button id="showCode" class="ghost">Show/Hide JS</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <div class="canvas-wrap" style="margin-bottom:12px;">
+          <canvas id="trajChart" class="canvas"></canvas>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="histChart" class="canvas"></canvas>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="card">
+      <h2>What to check (professor checklist)</h2>
+      <ol>
+        <li>Empirical counts of final scores match theoretical binomial probabilities (within sampling error).</li>
+        <li>As n and number of trajectories grow, the empirical distribution converges to theoretical one.</li>
+        <li>Random-walk view: each trajectory is a path of ±1 steps; the final S is a lattice value with parity consistent with n.</li>
+      </ol>
+
+      <h3>Small table: mapping</h3>
+      <table class="table">
+        <thead><tr><th>Quantity</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>p</td><td>single attacker success probability</td></tr>
+          <tr><td>m</td><td>attackers per week</td></tr>
+          <tr><td>q = 1-(1-p)^m</td><td>probability server is breached in a week</td></tr>
+          <tr><td>K ~ Binomial(n,q)</td><td>number of breached weeks</td></tr>
+          <tr><td>S = n-2K</td><td>final total score (sum of ±1 steps)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>JS source (simulation)</h2>
+      <div id="codeBlock" class="code-block" aria-hidden="true"><pre id="srcArea"><code>loading...</code></pre></div>
+    </section>
+
+    <div class="footer">&copy; 2025 Javid Farzaliyev — La Sapienza University</div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>
 
