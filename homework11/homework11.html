@@ -13,45 +13,46 @@
     <h1 class="title">Homework 11 — Wiener Process (Brownian Motion)</h1>
 
     <div class="card">
-        <h2>🎯 Task Overview</h2>
-        <p>Simulate a Wiener process using the Euler–Maruyama method. Optionally, extend to general stochastic differential equations (SDEs).</p>
+        <h2>Task Overview</h2>
+        <p>Simulate a Wiener process using the Euler–Maruyama method. Optionally, extend to general SDEs.</p>
     </div>
 
     <div class="card">
-        <h2>📘 Theory Summary</h2>
+        <h2>Theory Summary</h2>
         <h3>Wiener Process</h3>
         <ul>
-            <li>W₀ = 0</li>
+            <li>Initial value: W₀ = 0</li>
             <li>Independent increments</li>
-            <li>Increments are normally distributed: Wₜ − Wₛ ~ N(0, t − s)</li>
+            <li>Normally distributed increments: Wₜ − Wₛ ~ N(0, t − s)</li>
             <li>Continuous paths but nowhere differentiable</li>
         </ul>
+
         <h3>Euler–Maruyama Update</h3>
         <pre>W_{n+1} = W_n + √Δt · Zₙ, where Zₙ ~ N(0,1)</pre>
     </div>
 
     <div class="card">
-        <h2>🖥 Run Simulation</h2>
-        <p>Click the button to simulate a Wiener process. Output will appear below.</p>
+        <h2>Run Simulation</h2>
+        <p>Click below to simulate a Wiener process (output will appear in the box below).</p>
         <button id="runWiener" class="btn">Run Wiener Simulation</button>
         <pre id="outputWiener" style="white-space: pre-wrap; margin-top:10px;"></pre>
     </div>
 
     <div class="card">
-        <h2>📝 Interpretation</h2>
+        <h2>Interpretation</h2>
         <ul>
             <li>Variance grows linearly: Var(Wₜ) = t</li>
-            <li>Discrete approximation using Euler–Maruyama</li>
-            <li>Fundamental in stochastic calculus and finance</li>
+            <li>Euler–Maruyama provides a discrete approximation</li>
+            <li>Essential for stochastic calculus, finance, and simulations</li>
         </ul>
     </div>
 
     <div class="footer">
-        &copy; 2025 Javid Farzaliyev All rights reserved.
+        &copy; 2025 Javid Farzaliyev. All rights reserved.
     </div>
 
 </div>
 
-<script src="/statistics/homework/script11.js"></script>
+<script src="/statistics/homework/script.js"></script>
 </body>
 </html>
