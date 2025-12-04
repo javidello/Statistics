@@ -5,54 +5,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Homework 11 – Wiener Process</title>
 <link rel="stylesheet" href="/statistics/style.css">
-<!-- Include Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
 <div class="container">
+
     <h1 class="title">Homework 11 — Wiener Process (Brownian Motion)</h1>
 
     <div class="card">
         <h2>🎯 Task Overview</h2>
-        <p>Simulate a Wiener process using the Euler–Maruyama method. Optionally, generalize to other stochastic differential equations.</p>
+        <p>Simulate a Wiener process using the Euler–Maruyama method. Optionally, extend to general stochastic differential equations (SDEs).</p>
     </div>
 
     <div class="card">
         <h2>📘 Theory Summary</h2>
-        <h3>Wiener Process (Brownian Motion)</h3>
+        <h3>Wiener Process</h3>
         <ul>
             <li>W₀ = 0</li>
             <li>Independent increments</li>
-            <li>Normally distributed increments: Wₜ − Wₛ ~ N(0, t − s)</li>
+            <li>Increments are normally distributed: Wₜ − Wₛ ~ N(0, t − s)</li>
             <li>Continuous paths but nowhere differentiable</li>
         </ul>
-        <h3>Euler–Maruyama Method</h3>
-        <p>Discrete update for SDE: dXₜ = μ(Xₜ,t) dt + σ(Xₜ,t) dWₜ</p>
-        <pre>X_{n+1} = X_n + μ(X_n,t_n) Δt + σ(X_n,t_n) √Δt · Zₙ</pre>
-        <p>For Wiener process: μ = 0, σ = 1 → W_{n+1} = W_n + √Δt · Zₙ</p>
+        <h3>Euler–Maruyama Update</h3>
+        <pre>W_{n+1} = W_n + √Δt · Zₙ, where Zₙ ~ N(0,1)</pre>
     </div>
 
     <div class="card">
-        <h2>🖥 Run Simulations</h2>
-        <label>Time Horizon (T): <input type="number" id="T" value="1" step="0.1"></label>
-        <label>Steps (N): <input type="number" id="N" value="1000"></label>
+        <h2>🖥 Run Simulation</h2>
+        <p>Click the button to simulate a Wiener process. Output will appear below.</p>
         <button id="runWiener" class="btn">Run Wiener Simulation</button>
-        <canvas id="chartWiener" style="max-height:400px; margin-top:20px;"></canvas>
+        <pre id="outputWiener" style="white-space: pre-wrap; margin-top:10px;"></pre>
     </div>
 
     <div class="card">
         <h2>📝 Interpretation</h2>
         <ul>
-            <li>Wiener process forms the foundation of stochastic calculus.</li>
             <li>Variance grows linearly: Var(Wₜ) = t</li>
-            <li>Euler–Maruyama approximates paths with discrete normal increments</li>
+            <li>Discrete approximation using Euler–Maruyama</li>
+            <li>Fundamental in stochastic calculus and finance</li>
         </ul>
     </div>
 
     <div class="footer">
-        &copy; 2025 Javid Farzaliyev. All rights reserved.
+        &copy; 2025 Javid Farzaliyev All rights reserved.
     </div>
+
 </div>
 
 <script src="/statistics/homework/script11.js"></script>
