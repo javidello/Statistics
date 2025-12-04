@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homework 11 – Stochastic Differential Equations & Wiener Process</title>
+
+<style>
+    body {
+        font-family: "Inter", sans-serif;
+        background: #f7f5fb;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        line-height: 1.6;
+    }
+    header {
+        text-align: center;
+        padding: 40px 20px;
+        background: #6d4ccf;
+        color: #fff;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 2.2rem;
+        letter-spacing: 1px;
+    }
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 14px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h2 {
+        color: #6d4ccf;
+        margin-top: 30px;
+        font-size: 1.7rem;
+    }
+    code, pre {
+        background: #eee8ff;
+        padding: 8px 12px;
+        border-radius: 6px;
+        display: block;
+        white-space: pre-wrap;
+        margin-top: 10px;
+    }
+    .sim-box {
+        background: #faf7ff;
+        border-left: 5px solid #6d4ccf;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+    input, button {
+        padding: 10px 14px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        margin: 5px 0;
+        font-size: 1rem;
+    }
+    button {
+        background: #6d4ccf;
+        color: #fff;
+        cursor: pointer;
+        border: none;
+        transition: 0.3s;
+    }
+    button:hover {
+        background: #5b3abc;
+    }
+    canvas {
+        background: #ffffff;
+        border-radius: 8px;
+        margin-top: 20px;
+        width: 100%;
+        height: 400px;
+    }
+    footer {
+        text-align: center;
+        padding: 20px;
+        margin-top: 40px;
+        color: #777;
+        font-size: 0.9rem;
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>Homework 11 — Simulation of a Wiener Process using the Euler–Maruyama Method</h1>
+</header>
+
+<div class="container">
+
+<h2>1. Introduction</h2>
+<p>
+In this homework, we use the <strong>Euler–Maruyama method</strong>, previously introduced in earlier assignments, to simulate a 
+<strong>Wiener process (Brownian Motion)</strong>, one of the most fundamental objects in modern probability theory.
+A Wiener process is a continuous-time stochastic process used to model randomness in physics, finance, biology, and network traffic.
+</p>
+<p>
+We also optionally extend the simulator to allow simulation of general stochastic differential equations (SDEs) of the form:
+</p>
+
+<pre><code>dXₜ = μ(Xₜ, t) dt + σ(Xₜ, t) dWₜ</code></pre>
+
+<h2>2. What is a Wiener Process?</h2>
+<p>
+A <strong>Wiener process W(t)</strong> is a stochastic process defined by:
+</p>
+<ul>
+    <li><strong>W(0) = 0</strong></li>
+    <li><strong>Independent increments</strong></li>
+    <li><strong>W(t) − W(s) ~ N(0, t − s)</strong> for t > s</li>
+    <li><strong>Continuous paths</strong> almost surely</li>
+</ul>
+
+<p>
+It represents the mathematical model of continuous random movement and is the core ingredient of many stochastic models.
+</p>
+
+<h2>3. Euler–Maruyama Method (Definition)</h2>
+<p>
+To simulate an SDE numerically, we discretize time into n small steps of size Δt. For a general SDE:
+</p>
+
+<pre><code>dXₜ = μ(Xₜ, t) dt + σ(Xₜ, t) dWₜ</code></pre>
+
+the Euler–Maruyama update rule is:
+</p>
+
+<pre><code>X_{k+1} = X_k + μ(X_k, t_k) Δt + σ(X_k, t_k) √Δt · Z_k</code></pre>
+
+where:
+<ul>
+    <li><strong>Z_k ~ Normal(0,1)</strong></li>
+    <li>Δt = T / n</li>
+</ul>
+
+<p>
+For a Wiener process specifically:
+</p>
+
+<pre><code>μ = 0
+σ = 1
+
+so the update becomes:   W_{k+1} = W_k + √Δt · Z_k</code></pre>
+
+<h2>4. Simulation of a Wiener Process</h2>
+
+<div class="sim-box">
+    <label>Number of steps (n):</label><br>
+    <input id="steps" type="number" value="2000"><br>
+
+    <label>Total time T:</label><br>
+    <input id="T" type="number" step="0.1" value="1"><br>
+
+    <button onclick="simulateWiener()">Simulate Wiener Process</button>
+</div>
+
+<canvas id="plotW"></canvas>
+
+<h2>5. Optional: General SDE Simulator</h2>
+<p>This allows simulating: <strong>dX = μ(X,t) dt + σ(X,t) dW</strong></p>
+
+<div class="sim-box">
+    <label>Drift μ(x,t):</label><br>
+    <input id="drift" value="0"><br>
+
+    <label>Diffusion σ(x,t):</label><br>
+    <input id="diffusion" value="1"><br>
+
+    <label>Initial value X0:</label><br>
+    <input id="x0" type="number" value="0"><br>
+
+    <button onclick="simulateSDE()">Simulate General SDE</button>
+</div>
+
+<canvas id="plotSDE"></canvas>
+
+</div>
+
+<footer>
+    © 2025 Javid Farzaliyev — All rights reserved.
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
