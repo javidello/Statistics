@@ -1,187 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Homework 11 — SDEs & Wiener Process (Euler–Maruyama)</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<!-- Chart.js and MathJax -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homework 11 – Wiener Process</title>
+<link rel="stylesheet" href="/statistics/style.css">
+<!-- Include Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
-
-<style>
-:root{
-  --bg:#f5f6fa;
-  --card:#ffffff;
-  --text:#172031;
-  --muted:#475569;
-  --accent-a:#0ea5e9;
-  --accent-b:#7c3aed;
-  --accent-c:#f97316;
-  --radius:12px;
-  --shadow:0 10px 30px rgba(17,24,39,0.06);
-  --max-w:980px;
-  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
-}
-
-*{box-sizing:border-box;}
-html,body{height:100%;}
-body{
-  margin:0;
-  font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-  background:var(--bg);
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  line-height:1.6;
-}
-
-.container{max-width:var(--max-w);margin:28px auto;padding:28px;}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
-.brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
-.brand-mark{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;
-  color:#fff;font-weight:700;background:linear-gradient(135deg,var(--accent-a),var(--accent-b));
-  box-shadow:0 8px 20px rgba(14,165,233,0.08);}
-.brand-title .title{font-weight:700;color:var(--accent-b);}
-.brand-title .subtitle{font-size:0.85rem;color:var(--muted);}
-nav a{color:var(--muted);text-decoration:none;margin-left:10px;}
-.page-title h1{margin:0;font-size:1.6rem;color:var(--accent-a);}
-.page-title p{margin:6px 0 0;color:var(--muted);}
-
-/* cards */
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px;}
-h2{color:var(--accent-c);}
-h3{color:var(--accent-b);}
-p,li{color:var(--muted);}
-.math-box{background:#f3f6fb;border-radius:10px;padding:12px;margin:12px 0;border:1px solid #e9f0fb;text-align:center;}
-label{display:block;margin-top:8px;font-weight:600;color:var(--text);}
-input,select,button,textarea{font-family:inherit;}
-input[type="number"], input[type="text"], textarea, select {
-  width:100%; padding:8px; border-radius:8px; border:1px solid #e6e9ee; box-sizing:border-box; color:var(--text);
-}
-button{background:var(--accent-c);color:#fff;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600;}
-button.ghost{background:#fff;color:var(--accent-a);border:1px solid #e6e9ee;}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-@media(max-width:760px){.grid-2{grid-template-columns:1fr;}}
-.canvas-wrap{background:#fff;padding:12px;border-radius:10px;border:1px solid #eef2f6;}
-.canvas{width:100%;height:320px;}
-.small{font-size:0.95rem;color:var(--muted);}
-
-.code-block{display:none;margin-top:12px;background:#fff;padding:12px;border-radius:10px;border:1px solid #eef2f6;white-space:pre-wrap;font-family:var(--mono);font-size:0.95rem;}
-.footer{margin-top:20px;padding-top:18px;border-top:1px solid #eef2f6;color:var(--muted);text-align:center;font-size:0.95rem;}
-</style>
 </head>
 <body>
+
 <div class="container">
+    <h1 class="title">Homework 11 — Wiener Process (Brownian Motion)</h1>
 
-  <div class="header">
-    <a class="brand" href="../index.html">
-      <div class="brand-mark">SB</div>
-      <div class="brand-title">
-        <div class="title">Statistics Blog</div>
-        <div class="subtitle">Student projects & homework</div>
-      </div>
-    </a>
-    <nav>
-      <a href="../index.html">Home</a>
-      <a href="../homework10/homework10.html">HW10</a>
-    </nav>
-  </div>
-
-  <div class="page-title">
-    <h1>Homework 11 — Euler–Maruyama Simulator for Wiener Process & SDEs</h1>
-    <p>Simulate Brownian motion (Wiener process) and a general SDE using Euler–Maruyama. JS is external so your professor can inspect it.</p>
-  </div>
-
-  <section class="card">
-    <h2>Definitions & background</h2>
-    <p><strong>Wiener process (Brownian motion)</strong> \(W_t\): continuous-time process with independent increments, \(W_0=0\), and \(W_t-W_s\sim N(0,t-s)\) for \(t>s\).</p>
-    <p><strong>Stochastic differential equation (SDE)</strong> general form:</p>
-    <div class="math-box">
-      \( dX_t = \mu(X_t,t)\,dt + \sigma(X_t,t)\,dW_t. \)
-    </div>
-    <p>The Euler–Maruyama method is the discrete-time numerical integrator analogous to the Euler method for ODEs. For step size \(\Delta t\):</p>
-    <div class="math-box">
-      \( X_{k+1} = X_k + \mu(X_k,t_k)\Delta t + \sigma(X_k,t_k)\sqrt{\Delta t}\,Z_k,\quad Z_k\sim N(0,1). \)
-    </div>
-    <p>For the Wiener process specifically, \(\mu\equiv 0, \sigma\equiv 1\): \(W_{k+1} = W_k + \sqrt{\Delta t}\,Z_k\).</p>
-  </section>
-
-  <section class="card">
-    <h2>Tasks & what the simulator does</h2>
-    <ol>
-      <li>Simulate sample paths of a Wiener process on [0,T] with n steps.</li>
-      <li>Estimate empirical properties: increments distribution (should be normal with variance Δt), quadratic variation ≈ T.</li>
-      <li>Optional: simulate general SDE by providing μ(x,t) and σ(x,t) as JS expressions (kept simple and sandboxed — use variables x and t only).</li>
-    </ol>
-  </section>
-
-  <section class="card">
-    <h2>Simulator (interactive)</h2>
-    <div class="grid-2">
-      <div>
-        <label>Simulation type</label>
-        <select id="simType">
-          <option value="wiener">Wiener process (Brownian motion)</option>
-          <option value="sde">General SDE (Euler–Maruyama)</option>
-        </select>
-
-        <label>Time horizon T</label>
-        <input id="T" type="number" step="0.1" value="1">
-
-        <label>Steps (n)</label>
-        <input id="n" type="number" value="2000">
-
-        <label>Number of sample paths to show</label>
-        <input id="paths" type="number" value="3" min="1" max="10">
-      </div>
-
-      <div>
-        <label>Drift μ(x,t) — JS expression (example: "0" or "0.5*x")</label>
-        <input id="mu" type="text" value="0">
-
-        <label>Diffusion σ(x,t) — JS expression (example: "1" or "0.25+0.1*x")</label>
-        <input id="sigma" type="text" value="1">
-
-        <label>Initial value X0</label>
-        <input id="x0" type="number" value="0">
-      </div>
+    <div class="card">
+        <h2>🎯 Task Overview</h2>
+        <p>Simulate a Wiener process using the Euler–Maruyama method. Optionally, generalize to other stochastic differential equations.</p>
     </div>
 
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-      <button id="runBtn">Run simulation</button>
-      <button id="clearBtn" class="ghost">Clear</button>
-      <button id="showCodeBtn" class="ghost">Show/Hide JS source</button>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>Visualizations & diagnostics</h2>
-
-    <p class="small">Top: sample path(s). Middle: histogram of increments (compare with normal). Bottom: quadratic variation evolution.</p>
-
-    <div class="canvas-wrap" style="margin-bottom:12px;">
-      <canvas id="pathChart" class="canvas"></canvas>
-    </div>
-
-    <div class="grid-2">
-      <div class="canvas-wrap">
-        <canvas id="incHist" class="canvas"></canvas>
-      </div>
-      <div class="canvas-wrap">
-        <canvas id="qvChart" class="canvas"></canvas>
-      </div>
+    <div class="card">
+        <h2>📘 Theory Summary</h2>
+        <h3>Wiener Process (Brownian Motion)</h3>
+        <ul>
+            <li>W₀ = 0</li>
+            <li>Independent increments</li>
+            <li>Normally distributed increments: Wₜ − Wₛ ~ N(0, t − s)</li>
+            <li>Continuous paths but nowhere differentiable</li>
+        </ul>
+        <h3>Euler–Maruyama Method</h3>
+        <p>Discrete update for SDE: dXₜ = μ(Xₜ,t) dt + σ(Xₜ,t) dWₜ</p>
+        <pre>X_{n+1} = X_n + μ(X_n,t_n) Δt + σ(X_n,t_n) √Δt · Zₙ</pre>
+        <p>For Wiener process: μ = 0, σ = 1 → W_{n+1} = W_n + √Δt · Zₙ</p>
     </div>
 
-    <div id="codeBlock" class="code-block" aria-hidden="true"><pre id="sourceArea"><code>loading...</code></pre></div>
-  </section>
+    <div class="card">
+        <h2>🖥 Run Simulations</h2>
+        <label>Time Horizon (T): <input type="number" id="T" value="1" step="0.1"></label>
+        <label>Steps (N): <input type="number" id="N" value="1000"></label>
+        <button id="runWiener" class="btn">Run Wiener Simulation</button>
+        <canvas id="chartWiener" style="max-height:400px; margin-top:20px;"></canvas>
+    </div>
 
-  <div class="footer">&copy; 2025 Javid Farzaliyev — La Sapienza University</div>
+    <div class="card">
+        <h2>📝 Interpretation</h2>
+        <ul>
+            <li>Wiener process forms the foundation of stochastic calculus.</li>
+            <li>Variance grows linearly: Var(Wₜ) = t</li>
+            <li>Euler–Maruyama approximates paths with discrete normal increments</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Javid Farzaliyev. All rights reserved.
+    </div>
 </div>
 
-<!-- external JS (relative) -->
-<script src="script.js"></script>
+<script src="/statistics/homework/script11.js"></script>
 </body>
 </html>
